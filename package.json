@@ -1,0 +1,22 @@
+{
+  "name": "janus",
+  "version": "1.0.0",
+  "description": "Drug Test Lab Patient MIS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HCCB/janus.git"
+  },
+  "author": "Blue Cuenca <blue.cuenca@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HCCB/janus/issues"
+  },
+  "homepage": "https://github.com/HCCB/janus#readme",
+  "devDependencies": {
+    "babelify": "^7.3.0"
+  }
+}
