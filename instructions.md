@@ -3,28 +3,34 @@ Prerequisites
 
 * virtualenv
 * virtualenvwrapper
+  see http://virtualenvwrapper.readthedocs.org/en/latest/
 * nodejs / npm
+  install with: 
+``` 
+     $ sudo apt-get install npm
+     $ sudo npm install --upgrade npm 
+```
 * python-pip
+  install with:
+```
+     $ sudo apt-get install python-pip
+```
+
+
 
 
 Setup
 -----
 
-** Install core JS dependencies **
-
-install Browserify:
+** Clone this repository: **
 ```
-$ sudo npm install -g browserify
+git clone https://github.com/HCCB/janus.git janus
 ```
 
-also install uglify-js:
+** install pip dependencies **
 ```
-$ sudo npm install -g uglify-js
-```
+cd janus
+pip install -r requirements.txt
 
-lastly, install Babel plugin for Browserify
 ```
-$ sudo npm install --save-dev babelify
-```
-
 
