@@ -6,7 +6,7 @@ module.exports = {
 
   entry: {
     // Add as many entry points as you have container-react-components here
-    App1: './src/janus/App1',
+    App1: './src/reactjs/App1',
     vendors: ['react'],
   },
 
