@@ -63,4 +63,9 @@ target/
 .ipynb_checkpoints
 
 #nodejs
-node_modules
+#node_modules
+
+#bower
+#bower_components
+
+src/assets/bundles
