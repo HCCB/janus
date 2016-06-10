@@ -29,9 +29,31 @@ Setup
 git clone https://github.com/HCCB/janus.git janus
 ```
 
+** Create virtualenv **
+```
+mkvirtualenv janus
+```
+
 ** install pip dependencies **
 ```
 cd janus
+
 pip install -r requirements.txt
 
 ```
+
+** install JS dependencies **
+```
+npm install
+```
+
+
+Usage
+-----
+
+run on first terminal, so any changes to jsx sources will get bundle:
+```
+./node_modules/.bin/webpack --config webpack.config.js --watch 
+```
+
+
