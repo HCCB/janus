@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/HCCB/janus#readme",
   "devDependencies": {
-    "babelify": "^7.3.0"
+  },
+  "dependencies": {
   }
 }
