@@ -15,17 +15,26 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+DJANGO_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_NAME = os.path.basename(DJANGO_DIR)
+PROJECT_ROOT = os.path.normpath(os.path.join(DJANGO_DIR, "../../.."))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'omt_3!x#i++&949nhoxtzqy8un_foavd(^#pius5j96^r^+7l7'
+SECRET_KEY = 'h)fdma&==g1_0u)ret&r&9#6+joalh)7@c3qwlo_k84k+fxdu)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', ]
+if DEBUG:
+    print "BASE_DIR = '%s'" % BASE_DIR
+    print "PROJECT_NAME = '%s'" % PROJECT_NAME
+    print "PROJECT_ROOT = '%s'" % PROJECT_ROOT
+
+
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'debug_toolbar',
     'webpack_loader',
 ]
 
@@ -58,7 +66,9 @@ ROOT_URLCONF = 'janus.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,6 +136,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'janus/static'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'src', 'assets'),
+)
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'bundles/',  # must end with slash
+        'STATS_FILE': os.path.join(PROJECT_ROOT, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
+
+if DEBUG:
+    print WEBPACK_LOADER

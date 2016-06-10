@@ -1,3 +1,5 @@
+This project is based on http://owaislone.org/blog/webpack-plus-reactjs-and-django/
+
 Prerequisites
 -------------
 
@@ -33,4 +35,3 @@ cd janus
 pip install -r requirements.txt
 
 ```
-
