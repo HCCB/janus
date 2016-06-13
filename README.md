@@ -30,7 +30,7 @@ $ git clone https://github.com/HCCB/janus.git
 * see [libraries.md](https://github.com/HCCB/janus/blob/master/libraries.md) files
 
 ## License 
-* see [LICENSE](https://github.com/HCCB/janus/blob/master/LICENSE.md) file
+* see [LICENSE](https://github.com/HCCB/janus/blob/master/LICENSE) file
 
 ## Version 
 * Version X.Y
