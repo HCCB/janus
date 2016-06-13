@@ -16,7 +16,7 @@ $ git clone https://github.com/HCCB/janus.git
 ```
 
 ## Requirements
-* see [requirements.txt](https://github.com/HCCB/janus/requirements.txt)
+* see [requirements.txt](https://github.com/HCCB/janus/blob/master/requirements.txt)
 
 ## Contributors
 
@@ -24,7 +24,7 @@ $ git clone https://github.com/HCCB/janus.git
 * [Contributors](https://github.com/HCCB/janus/graphs/contributors)
 
 ### Translations
-* [Transifex](https://www.transifex.com/projects/p/cerberus/)
+* [Transifex](https://www.transifex.com/projects/p/janus/)
 
 ### Third party libraries
 * see [LIBRARIES](https://github.com/HCCB/janus/blob/master/LIBRARIES.md) files
