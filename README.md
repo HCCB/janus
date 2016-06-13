@@ -27,7 +27,7 @@ $ git clone https://github.com/HCCB/janus.git
 * [Transifex](https://www.transifex.com/projects/p/janus/)
 
 ### Third party libraries
-* see [LIBRARIES](https://github.com/HCCB/janus/blob/master/LIBRARIES.md) files
+* see [libraries.md](https://github.com/HCCB/janus/blob/master/libraries.md) files
 
 ## License 
 * see [LICENSE](https://github.com/HCCB/janus/blob/master/LICENSE.md) file
