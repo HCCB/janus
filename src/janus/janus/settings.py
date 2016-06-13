@@ -34,7 +34,7 @@ if DEBUG:
     print "PROJECT_ROOT = '%s'" % PROJECT_ROOT
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', ]
 
 
 # Application definition

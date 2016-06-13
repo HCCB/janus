@@ -23,6 +23,9 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+*.py[cod]
+__pycache__/
+*$py.class
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -52,6 +55,7 @@ coverage.xml
 # Django stuff:
 *.log
 db.sqlite*
+src/janus/static
 
 # Sphinx documentation
 docs/_build/
