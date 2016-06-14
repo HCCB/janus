@@ -26,10 +26,19 @@ module.exports = {
 
   module: {
     loaders: [
-        { 
-            test: /\.css$/, 
-            loader: ExtractTextPlugin.extract("style", "css")
-        }
+      { 
+        test: /\.css$/, 
+        loader: ExtractTextPlugin.extract("style", "css")
+      },  {
+        test: /\.txt$/,
+        loader: 'raw-loader',
+      }, {
+        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+        loader: 'url-loader?limit=10000',
+      }, {
+        test: /\.(eot|ttf|wav|mp3)$/,
+        loader: 'file-loader',
+      }
     ] // add all common loaders here
   },
 
