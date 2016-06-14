@@ -5,7 +5,8 @@ var App2 = require('./app2');
 
 require("../css/style.css");
 
-require("bootstrap/dist/css/bootstrap.css");
+require("bootstrap/dist/css/bootstrap.min.css");
+require("bootstrap/dist/css/bootstrap-theme.min.css");
 
 var Alert = require('react-bootstrap/lib/Alert');
 
