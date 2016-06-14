@@ -1,0 +1,12 @@
+/* general stylesheet */
+
+html {
+    font-family: san-serif;
+    -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    color: red;
+}
+
+body {
+    color: blue;
+}
