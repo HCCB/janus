@@ -13,13 +13,15 @@ module.exports = {
 
   output: {
       path: path.resolve('./src/assets/bundles/'),
-      filename: "[name]-[hash].js"
+      filename: "[name]-[hash].js",
+      chunkFilename: "[id].js"
   },
 
   plugins: [
-      new ExtractTextPlugin("style.css", {
-          allChunks: true
-      })
+      // new ExtractTextPlugin("style.css", {
+      //     allChunks: true
+      // })
+      new ExtractTextPlugin("[name].css")
   ], // add all common plugins here
 
   module: {
