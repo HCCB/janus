@@ -3,57 +3,84 @@ This project is based on http://owaislone.org/blog/webpack-plus-reactjs-and-djan
 Prerequisites
 -------------
 
-* virtualenv
-* virtualenvwrapper
-  see http://virtualenvwrapper.readthedocs.org/en/latest/
-* nodejs / npm
-  install with: 
-``` 
-     $ sudo apt-get install npm
-     $ sudo npm install --upgrade npm 
-```
 * python-pip
   install with:
 ```
      $ sudo apt-get install python-pip
 ```
 
+* virtualenv
+* virtualenvwrapper
+  see http://virtualenvwrapper.readthedocs.org/en/latest/
+  create virtualenv for janus, e.g.:
+```
+     $ mkvirtualenv janus
+     $ setvirtualenvproject # run this to set the directory...
+```
 
+* nodejs / npm
+  install with:
+  (NB: you normally should **NOT** run script directly off the internet)
+``` 
+     $ sudo apt-get purge npm nodejs nodejs-legacy
+     $ sudo apt-get install nodejs
+     $ sudo npm install -g --upgrade npm 
+```
+  for those using proxy (apt-proxy, etc) you may need to add the following:
+```
+     Acquire::http::Proxy { deb.nodesource.com DIRECT; };
+```
+  to your apt proxy configuration.
 
+* babel
+  install babel global, babel does not like to be installed locally:
+```
+     $ sudo npm install -g babel
+```
 
 Setup
 -----
 
 ** Clone this repository: **
 ```
-git clone https://github.com/HCCB/janus.git janus
+    $ git clone https://github.com/HCCB/janus.git janus
 ```
 
 ** Create virtualenv **
 ```
-mkvirtualenv janus
+    $ mkvirtualenv janus
 ```
 
 ** install pip dependencies **
 ```
-cd janus
+    $ cd janus
 
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 
 ```
 
 ** install JS dependencies **
 ```
-npm install
+    $ npm install
 ```
 
 
 Usage
 -----
 
-run on first terminal, so any changes to jsx sources will get bundle:
+On one terminal run:
 ```
-./node_modules/.bin/webpack --config webpack.config.js --watch 
+    $ npm start
 ```
+
+On another terminal run:
+```
+    $ cd src/janus
+    $ ./manage.py runserver
+```
+
+open browser at http://localhost:8000 
+
+You can now edit the javascript files, and have it reflected into the browser without a refresh.  Of course, if you make changes that has errors, you may still need to refresh your browser.
 
 
