@@ -68,7 +68,7 @@ Setup
     $ cd janus
     $ setvirtualenvproject
 ```
-    ```setvirtualenvproject``` is a command from virtualenvwrapper that will set the default directory of the project to the current directory.  So, whenever you ```workon janus```, your current directory is set to the directory remembered with ```setvirtualenvproject```.
+    The ```setvirtualenvproject``` is a command from virtualenvwrapper that will set the default directory of the project to the current directory.  So, whenever you ```workon janus```, your current directory is set to the directory remembered with ```setvirtualenvproject```.
 
 
 ** install JS dependencies **
