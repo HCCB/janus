@@ -73,4 +73,9 @@ node_modules/
 #bower
 bower_components/
 
+# webpack output
 src/assets/bundles
+webpack-stats*.json
+
+# vim temporary files
+*.swp
