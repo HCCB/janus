@@ -4,13 +4,18 @@ Prerequisites
 -------------
 
 * python-pip
+
   install with:
+
 ```
      $ sudo apt-get install python-pip
 ```
 
+
 * virtualenv
+
 * virtualenvwrapper
+
   see http://virtualenvwrapper.readthedocs.org/en/latest/
   create virtualenv for janus, e.g.:
 ```
@@ -18,22 +23,31 @@ Prerequisites
      $ setvirtualenvproject # run this to set the directory...
 ```
 
+
 * nodejs / npm
+
   install with:
   (NB: you normally should **NOT** run script directly off the internet)
+
 ``` 
      $ sudo apt-get purge npm nodejs nodejs-legacy
      $ sudo apt-get install nodejs
      $ sudo npm install -g --upgrade npm 
 ```
+
   for those using proxy (apt-proxy, etc) you may need to add the following:
+
 ```
      Acquire::http::Proxy { deb.nodesource.com DIRECT; };
 ```
+
   to your apt proxy configuration.  (usually found in /etc/apt/apt.conf.d/<*>proxy)
 
+
 * babel
+
   install babel global, babel does not like to be installed locally:
+
 ```
      $ sudo npm install -g babel
 ```
@@ -41,27 +55,33 @@ Prerequisites
 Setup
 -----
 
-** Clone this repository: **
-```
-    $ git clone https://github.com/HCCB/janus.git janus
-```
-
 ** Create virtualenv **
+
 ```
     $ mkvirtualenv janus
 ```
 
-** install pip dependencies **
+** Clone this repository: **
+
 ```
+    $ git clone https://github.com/HCCB/janus.git janus
     $ cd janus
-
-$ pip install -r requirements.txt
-
+    $ setvirtualenvproject
 ```
+    ```setvirtualenvproject``` is a command from virtualenvwrapper that will set the default directory of the project to the current directory.  So, whenever you ```workon janus```, your current directory is set to the directory remembered with ```setvirtualenvproject```.
+
 
 ** install JS dependencies **
+
 ```
     $ npm install
+```
+
+** install pip dependencies **
+
+```
+    $ pip install -r requirements.txt
+
 ```
 
 
