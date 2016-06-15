@@ -30,7 +30,7 @@ Prerequisites
 ```
      Acquire::http::Proxy { deb.nodesource.com DIRECT; };
 ```
-  to your apt proxy configuration.
+  to your apt proxy configuration.  (usually found in /etc/apt/apt.conf.d/<*>proxy)
 
 * babel
   install babel global, babel does not like to be installed locally:
