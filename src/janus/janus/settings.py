@@ -34,8 +34,7 @@ if DEBUG:
     print "PROJECT_ROOT = '%s'" % PROJECT_ROOT
 
 
-ALLOWED_HOSTS = ['localhost', ]
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
 
 # Application definition
 
@@ -139,7 +138,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'src', 'assets'),
+    ('dist', os.path.join(PROJECT_ROOT, 'src', 'assets', 'dist')),  # dist
 )
 
 WEBPACK_LOADER = {
@@ -156,7 +155,8 @@ if DEBUG:
     print WEBPACK_LOADER
 
 if not DEBUG:
-    WEBPACK_LOADER.update({
+    WEBPACK_LOADER['DEFAULT'].update({
         'BUNDLE_DIR_NAME': 'dist/',
         'STATS_FILE': os.path.join(PROJECT_ROOT, 'webpack-stats-prod.json')
     })
+
