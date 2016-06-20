@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'webpack_loader',
+    'rest_framework',
+
+    'drugtest',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -159,4 +162,10 @@ if not DEBUG:
         'BUNDLE_DIR_NAME': 'dist/',
         'STATS_FILE': os.path.join(PROJECT_ROOT, 'webpack-stats-prod.json')
     })
+
+# Django REST Framework Defaults and Settings:
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 10,
+}
 
