@@ -79,3 +79,6 @@ webpack-stats*.json
 
 # vim temporary files
 *.swp
+
+# webstorm files
+.idea
