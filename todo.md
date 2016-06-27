@@ -1,3 +1,3 @@
-** To Do List ** 
+## To Do List ##
 
-## this is a note to myself ##
+
