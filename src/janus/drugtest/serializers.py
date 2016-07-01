@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from models import Person
+from models import Patient
 
 
-class PersonSerializer(serializers.ModelSerializer):
+class PatientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Person
+        model = Patient

@@ -28,10 +28,10 @@ SECRET_KEY = 'h)fdma&==g1_0u)ret&r&9#6+joalh)7@c3qwlo_k84k+fxdu)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-if DEBUG:
-    print "BASE_DIR = '%s'" % BASE_DIR
-    print "PROJECT_NAME = '%s'" % PROJECT_NAME
-    print "PROJECT_ROOT = '%s'" % PROJECT_ROOT
+# if DEBUG:
+    # print "# BASE_DIR = '%s'" % BASE_DIR
+    # print "# PROJECT_NAME = '%s'" % PROJECT_NAME
+    # print "# PROJECT_ROOT = '%s'" % PROJECT_ROOT
 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
@@ -154,8 +154,8 @@ WEBPACK_LOADER = {
     }
 }
 
-if DEBUG:
-    print WEBPACK_LOADER
+# if DEBUG:
+#    print "# %s " % WEBPACK_LOADER
 
 if not DEBUG:
     WEBPACK_LOADER['DEFAULT'].update({
