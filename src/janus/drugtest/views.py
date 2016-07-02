@@ -8,7 +8,7 @@ from models import Patient
 
 class PatientViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows persons to be viewed or edited.
+    API endpoint that allows patients to be viewed or edited.
     """
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
