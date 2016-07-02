@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.contrib.auth.models import User
 
 GENDER_CHOICES = [
     ('M', 'Male'),
@@ -54,6 +54,7 @@ class Physician(Person):
 class Staff(Person):
     designation = models.CharField(max_length=60)
     suffix = models.CharField(max_length=20)
+    username = models.OneToOneField(User)
 
     def _get_suffix(self):
         return u", %s" % self.suffix if self.suffix.strip() else u""
