@@ -53,6 +53,13 @@ class Patient(Person):
     birthdate = models.DateField()
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
+    @property
+    def age(self):
+        today = datetime.today()
+        born = self.birthdate
+        return today.year - born.year - \
+            ((today.month, today.day) < (born.month, born.day))
+
 
 class Physician(Person):
     def __unicode__(self):
