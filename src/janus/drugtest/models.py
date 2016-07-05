@@ -1,9 +1,15 @@
 from __future__ import unicode_literals
 
-from datetime.date import today
+from datetime import datetime
 
 from django.db import models
 
+from tinymce.models import HTMLField
+
+RESULT_TYPE_CHOICE = (
+    (1, 'Numeric'),
+    (2, 'Text'),
+)
 
 GENDER_CHOICES = [
     ('M', 'Male'),
@@ -78,28 +84,43 @@ class TestCategory(models.Model):
         else:
             return u"%s" % self.name
 
-RESULT_TYPE_CHOICE = (
-    (1, 'Numeric'),
-    (2, 'Text'),
-)
+    class Meta:
+        verbose_name = "Test Category"
+        verbose_name_plural = "Test Categories"
+
+
+class TestProfile(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return u"%s" % self.name
 
 
 class Analysis(models.Model):
     category = models.ForeignKey(TestCategory)
     name = models.CharField(max_length=60)
-    short_name = models.CharField(max_length=30)
-    result_type = models.SmallIntegerField(choides=RESULT_TYPE_CHOICE)
-    reference_text = models.TextField()
+    short_name = models.CharField(max_length=30, blank=True, default='')
+    result_type = models.SmallIntegerField(choices=RESULT_TYPE_CHOICE)
+    reference_text = HTMLField(blank=True, default='')
+
+    profiles = models.ManyToManyField(to=TestProfile, blank=True)
 
     def __unicode__(self):
-        return u"%s" % self.short_name
+        if self.short_name:
+            return u"%s" % self.short_name
+        else:
+            return u"%s" % self.name
+
+    class Meta:
+        verbose_name_plural = "Analyses"
+        ordering = ('name', )
 
 
 class ResultMaster(models.Model):
     patient = models.ForeignKey(Patient)
-    case_number = models.CharField(max_legnth=30)
+    case_number = models.CharField(max_length=30)
     room_number = models.CharField(max_length=20)
-    date = models.DateField(default=today)
+    date = models.DateField(default=datetime.now)
     category = models.ForeignKey(TestCategory)
 
     def __unicode__(self):
@@ -112,7 +133,7 @@ class ResultMaster(models.Model):
 class ResultDetail(models.Model):
     master = models.ForeignKey(ResultMaster)
     analysis = models.ForeignKey(Analysis)
-    result = models.TextField()
+    result = HTMLField()
 
     def __unicode__(self):
         return u"%s: %s" % (

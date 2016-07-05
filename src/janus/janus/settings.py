@@ -28,12 +28,6 @@ SECRET_KEY = 'h)fdma&==g1_0u)ret&r&9#6+joalh)7@c3qwlo_k84k+fxdu)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# if DEBUG:
-    # print "# BASE_DIR = '%s'" % BASE_DIR
-    # print "# PROJECT_NAME = '%s'" % PROJECT_NAME
-    # print "# PROJECT_ROOT = '%s'" % PROJECT_ROOT
-
-
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
 
 # Application definition
@@ -48,6 +42,7 @@ INSTALLED_APPS = [
 
     'webpack_loader',
     'rest_framework',
+    'tinymce',
 
     'drugtest',
 ]
@@ -168,4 +163,3 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 10,
 }
-
