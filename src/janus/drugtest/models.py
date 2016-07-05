@@ -55,6 +55,7 @@ class Patient(Person):
 
     @property
     def age(self):
+        """ compute patient's current age """
         today = datetime.today()
         born = self.birthdate
         return today.year - born.year - \
