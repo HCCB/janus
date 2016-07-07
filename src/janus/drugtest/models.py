@@ -108,7 +108,8 @@ class Analysis(models.Model):
     category = models.ForeignKey(TestCategory)
     name = models.CharField(max_length=60)
     short_name = models.CharField(max_length=30, blank=True, default='')
-    result_type = models.SmallIntegerField(choices=RESULT_TYPE_CHOICE)
+    result_type = models.SmallIntegerField(
+        choices=RESULT_TYPE_CHOICE, default=2)
     reference_text = HTMLField(blank=True, default='')
 
     profiles = models.ManyToManyField(to=TestProfile, blank=True)
@@ -120,7 +121,7 @@ class Analysis(models.Model):
             return u"%s" % self.name
 
     class Meta:
-        verbose_name_plural = "Analyses"
+        verbose_name = "Test"
         ordering = ('name', )
 
 

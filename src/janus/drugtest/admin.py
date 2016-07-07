@@ -9,6 +9,9 @@ class AnalysisAdmin(admin.ModelAdmin):
     list_display = ('name', 'short_name', 'category')
     list_filter = ('category', 'profiles',)
 
+
 admin.site.register([Patient, Physician, Staff])
-admin.site.register([TestCategory, TestProfile])
+admin.site.register([TestCategory, ])
+
 admin.site.register(Analysis, AnalysisAdmin)
+admin.site.register(TestProfile)
