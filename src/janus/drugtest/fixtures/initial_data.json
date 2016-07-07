@@ -8,7 +8,11 @@
       "short_name": "U/A",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         1,
+         2,
+         3
+      ]
    }
 },
 {
@@ -95,10 +99,13 @@
    "fields": {
       "category": 1,
       "name": "Fecalysis",
-      "short_name": "",
+      "short_name": "S/E",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         2,
+         3
+      ]
    }
 },
 {
@@ -158,7 +165,9 @@
       "short_name": "ABO/RH Typing",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         1
+      ]
    }
 },
 {
@@ -227,10 +236,13 @@
    "fields": {
       "category": 3,
       "name": "Fasting Blood Sugar",
-      "short_name": "",
+      "short_name": "FBS",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         2,
+         3
+      ]
    }
 },
 {
@@ -290,7 +302,10 @@
       "short_name": "BUA",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         2,
+         3
+      ]
    }
 },
 {
@@ -302,7 +317,9 @@
       "short_name": "BUN",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         3
+      ]
    }
 },
 {
@@ -314,7 +331,10 @@
       "short_name": "CREA",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         2,
+         3
+      ]
    }
 },
 {
@@ -374,7 +394,10 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         2,
+         3
+      ]
    }
 },
 {
@@ -386,7 +409,9 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
-      "profiles": []
+      "profiles": [
+         3
+      ]
    }
 },
 {

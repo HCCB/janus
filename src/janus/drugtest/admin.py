@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from models import Patient, Physician, Staff
-from models import TestCategory, Analysis, TestProfile
+from models import TestCategory, Analysis
 # from models import ResultMaster, ResultDetail
 
 
@@ -14,4 +14,3 @@ admin.site.register([Patient, Physician, Staff])
 admin.site.register([TestCategory, ])
 
 admin.site.register(Analysis, AnalysisAdmin)
-admin.site.register(TestProfile)
