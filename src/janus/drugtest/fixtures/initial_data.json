@@ -1,0 +1,621 @@
+[
+{
+   "model": "drugtest.analysis",
+   "pk": 1,
+   "fields": {
+      "category": 1,
+      "name": "Urinalysis",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 2,
+   "fields": {
+      "category": 4,
+      "name": "Hepatitis B Surface Antigen (RAPID)",
+      "short_name": "HBsAg",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": [
+         1
+      ]
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 3,
+   "fields": {
+      "category": 2,
+      "name": "Complete Blood Count",
+      "short_name": "CBC",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": [
+         1,
+         2,
+         3
+      ]
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 4,
+   "fields": {
+      "category": 1,
+      "name": "Urine Ketone",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 5,
+   "fields": {
+      "category": 1,
+      "name": "Urine Bilirubin",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 6,
+   "fields": {
+      "category": 1,
+      "name": "Urine Glucose",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 7,
+   "fields": {
+      "category": 1,
+      "name": "Urine Specific Gravity",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 8,
+   "fields": {
+      "category": 1,
+      "name": "Fecalysis",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 9,
+   "fields": {
+      "category": 1,
+      "name": "Pregnancy Test",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 10,
+   "fields": {
+      "category": 2,
+      "name": "Platelet Count",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 11,
+   "fields": {
+      "category": 2,
+      "name": "Hematocrit",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 12,
+   "fields": {
+      "category": 2,
+      "name": "Hemoglobin",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 13,
+   "fields": {
+      "category": 2,
+      "name": "Blood Typing",
+      "short_name": "ABO/RH Typing",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 14,
+   "fields": {
+      "category": 2,
+      "name": "Peripheral Smear",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 15,
+   "fields": {
+      "category": 2,
+      "name": "Erythrocyte Sedimentation Rate",
+      "short_name": "ESR",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 16,
+   "fields": {
+      "category": 2,
+      "name": "Malarial Smear",
+      "short_name": "BSMP",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 17,
+   "fields": {
+      "category": 2,
+      "name": "Crossmatching",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 18,
+   "fields": {
+      "category": 2,
+      "name": "Clotting Time / Bleeding Time",
+      "short_name": "CTBT",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 19,
+   "fields": {
+      "category": 3,
+      "name": "Fasting Blood Sugar",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 20,
+   "fields": {
+      "category": 3,
+      "name": "Random Blood Sugar",
+      "short_name": "RBS",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 21,
+   "fields": {
+      "category": 3,
+      "name": "HGT/CBS",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 22,
+   "fields": {
+      "category": 3,
+      "name": "2 Hours PPBS",
+      "short_name": "2hrs. PPBS",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 23,
+   "fields": {
+      "category": 3,
+      "name": "HBA1C",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 24,
+   "fields": {
+      "category": 3,
+      "name": "Blood Uric Acid",
+      "short_name": "BUA",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 25,
+   "fields": {
+      "category": 3,
+      "name": "Blood Urea Nitrogen",
+      "short_name": "BUN",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 26,
+   "fields": {
+      "category": 3,
+      "name": "Creatinine",
+      "short_name": "CREA",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 27,
+   "fields": {
+      "category": 3,
+      "name": "Lipid Profile",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 28,
+   "fields": {
+      "category": 3,
+      "name": "Total Cholesterol",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 29,
+   "fields": {
+      "category": 3,
+      "name": "Triglyerides",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 30,
+   "fields": {
+      "category": 3,
+      "name": "Electrolytes",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 31,
+   "fields": {
+      "category": 3,
+      "name": "SGPT",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 32,
+   "fields": {
+      "category": 3,
+      "name": "SGOT",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 33,
+   "fields": {
+      "category": 3,
+      "name": "Serum Albumin",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 34,
+   "fields": {
+      "category": 3,
+      "name": "Serum Total Protien",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 35,
+   "fields": {
+      "category": 4,
+      "name": "Typhoid Test",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 36,
+   "fields": {
+      "category": 4,
+      "name": "Dengue Duo (Ag-Ab)",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 37,
+   "fields": {
+      "category": 4,
+      "name": "Cardiac Troponin I",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 38,
+   "fields": {
+      "category": 5,
+      "name": "OGTT (50g)",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 39,
+   "fields": {
+      "category": 5,
+      "name": "ABG",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 40,
+   "fields": {
+      "category": 5,
+      "name": "Protime",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 41,
+   "fields": {
+      "category": 5,
+      "name": "APTT",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 42,
+   "fields": {
+      "category": 5,
+      "name": "Bilirubin",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 43,
+   "fields": {
+      "category": 5,
+      "name": "Drug Test",
+      "short_name": "DT",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 44,
+   "fields": {
+      "category": 5,
+      "name": "(1 Extraction) 50g OCT",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 45,
+   "fields": {
+      "category": 5,
+      "name": "(4 Extraction) 75g OGTT",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.analysis",
+   "pk": 46,
+   "fields": {
+      "category": 5,
+      "name": "Pap Smear",
+      "short_name": "",
+      "result_type": 2,
+      "reference_text": "",
+      "profiles": []
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 1,
+   "fields": {
+      "name": "Clinical Microscopy",
+      "alternate_name": ""
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 2,
+   "fields": {
+      "name": "Hematology",
+      "alternate_name": "Blood Test"
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 3,
+   "fields": {
+      "name": "Clinical Chemistry",
+      "alternate_name": ""
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 4,
+   "fields": {
+      "name": "Immuno-Serology",
+      "alternate_name": ""
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 5,
+   "fields": {
+      "name": "Miscellaneous",
+      "alternate_name": ""
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 1,
+   "fields": {
+      "name": "OB Panel"
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 2,
+   "fields": {
+      "name": "Executive Panel 1"
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 3,
+   "fields": {
+      "name": "Executive Panel 2"
+   }
+}
+]
