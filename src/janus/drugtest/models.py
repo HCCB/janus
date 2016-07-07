@@ -130,13 +130,13 @@ class ResultMaster(models.Model):
     case_number = models.CharField(max_length=30)
     room_number = models.CharField(max_length=20)
     date = models.DateField(default=datetime.now)
-    category = models.ForeignKey(TestCategory)
+    title = models.CharField(max_length=60)  # generally same as tests' category
 
     def __unicode__(self):
         return u"%s #: %s - %s" % (
             self.patient.fullname,
             self.case_number,
-            self.category)
+            self.title)
 
 
 class ResultDetail(models.Model):
