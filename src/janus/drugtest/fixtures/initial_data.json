@@ -5,7 +5,7 @@
    "fields": {
       "category": 1,
       "name": "Urinalysis",
-      "short_name": "",
+      "short_name": "U/A",
       "result_type": 2,
       "reference_text": "",
       "profiles": []
