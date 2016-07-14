@@ -12,5 +12,5 @@ router.register(r'patient', views.PatientViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^testpdf$', views.pdf_view, name='pdftest'),
+    url(r'^testpdf/$', views.pdf_view, name='pdftest'),
 ]
