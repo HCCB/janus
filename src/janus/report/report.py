@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os.path
 
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
@@ -9,11 +10,16 @@ from reportlab.platypus.frames import Frame
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A5, landscape
 
+from reportlab.lib.enums import TA_CENTER
+
 from reportlab.lib.utils import ImageReader
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.colors import red
 
 # from reportlab.platypus.flowables import Flowable
 
-# from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet
 
 
 class ReportTemplate(BaseDocTemplate):
@@ -22,19 +28,23 @@ class ReportTemplate(BaseDocTemplate):
         self.allowSplitting = 0
         BaseDocTemplate.__init__(self, filename, **kw)
 
-        height, width = A5
-        print A5
-        topmargin = 2.5 * cm
-        leftmargin = 2 * cm
+        self.actualWidth, self.actualHeight = landscape(A5)
+        print "self.height:", self.height
+        self.topmargin = 2.85 * cm
+        self.leftmargin = 0.15 * cm
+        self.bottommargin = 0.15*cm
 
-        fh = height - (2 * topmargin)
-        fw = width - (2 * leftmargin)
+        fh = self.actualHeight - self.topmargin - self.bottommargin
+        fw = self.actualWidth - (2 * self.leftmargin)
 
-        frame = Frame(leftmargin, topmargin, fw, fh, id='ContentFrame',
+        frame = Frame(self.leftmargin, self.bottommargin,
+                      fw, fh,
+                      id='ContentFrame',
                       showBoundary=True)
 
         template = PageTemplate('normal', frames=[frame, ],
                                 pagesize=landscape(A5))
+        self.loadFonts()
         self.addPageTemplates(template)
 
     def afterFlowable(self, flowable):
@@ -48,19 +58,68 @@ class ReportTemplate(BaseDocTemplate):
                 self.notify('TOCEntry', (1, text, self.page))
 
     def beforePage(self):
-        import os.path
+        self.canv.saveState()
 
-        c = self.canv
-        c.saveState()
+        self.drawHeader()
 
-        c.drawString(0.2*cm, 0.2*cm, "Hello World")
+        self.canv.restoreState()
 
-        path = os.path.dirname(os.path.realpath(__file__))
-        logo_fname = os.path.join(path, 'static/HCCB-Hospital-Logo.png')
+    def drawLogo(self):
+        logo_fname = self.normpath('static/HCCB-Hospital-Logo.png')
         logo = ImageReader(logo_fname)
-        c.drawImage(logo, 0.2*cm, 0.5*cm, mask='auto')
+        h = self.actualHeight
+        self.canv.drawImage(logo, 0.2*cm, h-self.topmargin,
+                            height=self.topmargin,
+                            mask='auto',
+                            preserveAspectRatio=True
+                            )
 
-        c.restoreState()
+    def drawHeader(self):
+        self.drawLogo()
+        styles = getSampleStyleSheet()
+        sN = styles['Normal']
+        sH = styles['Heading1']
+
+        sH.fontName = "OldEngMT"
+        sH.textColor = red
+        sH.leading = 18
+        sH.fontSize = 16
+
+        sN.fontSize = 9
+        sN.leading = 10
+
+        sN.alignment = sH.alignment = TA_CENTER
+        sN.spaceBefore = sH.spaceBefore = 0
+        sN.spaceAfter = sH.spaceAfter = 0
+
+        story = []
+        story.append(Paragraph("Holy Child Colleges of Butuan - Hospital", sH))
+        story.append(Paragraph("<b>(JP Esteves Clinical Laboratory)</b>", sN))
+        story.append(Paragraph("2nd St., Guingona Subd., " +
+                               "Butuan City, Philippines", sN))
+        story.append(Paragraph("Tel. No.: +63 (85) 342-5186", sN))
+        story.append(Paragraph("Telefax No.: +63 (95) 342-397/225-6872", sN))
+        story.append(Paragraph("email: hccb.hospital@gmail.com", sN))
+
+        w = self.actualWidth
+        h = self.actualHeight
+        f = Frame(0, h-self.topmargin, w, self.topmargin,
+                  showBoundary=False)
+        f.addFromList(story, self.canv)
+
+        self.canv.setStrokeColor(red)
+        self.canv.setLineWidth(3)
+        self.canv.line(0.15*cm, h-self.topmargin,
+                       w-0.15*cm, h-self.topmargin,
+                       )
+
+    def normpath(self, filespec):
+        path = os.path.dirname(os.path.relpath(__file__))
+        return os.path.join(path, filespec)
+
+    def loadFonts(self):
+        ttfFile = self.normpath('fonts/oldeng.ttf')
+        pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
 
 
 def test():
