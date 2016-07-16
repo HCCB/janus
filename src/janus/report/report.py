@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import os.path
+# from collections import defaultdict
+# from itertools import chain
 
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
@@ -19,7 +21,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.colors import black, red
 
-# from reportlab.platypus.flowables import Flowable
+from reportlab.platypus.flowables import Flowable
 
 from reportlab.lib.styles import getSampleStyleSheet
 
@@ -128,6 +130,117 @@ class ReportTemplate(BaseDocTemplate):
         pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
 
 
+class MasterInfo(Flowable):
+    def __init__(self, **kwargs):
+        data = {}
+        p = kwargs.get('patient', None)
+        if p:
+            for k in ['fullname', 'age', 'gender']:
+                self.setData(p, k, data)
+            del kwargs['patient']
+
+        for k in ['fullname', 'age', 'gender', 'date',
+                  'room_no', 'physician', 'case_no']:
+            data[k] = kwargs.get(k, "NO_VALUE_SET")
+            if k in kwargs:
+                del kwargs[k]
+
+        self.config = {}
+        for k in ['font', 'fontsize', 'offset', 'width', 'spacer']:
+            if k in kwargs:
+                # setattr(self, k, kwargs[k])
+                self.config[k] = kwargs[k]
+                del kwargs[k]
+
+        if len(kwargs):
+            raise TypeError("__init__ got an unxepected keyworkd '%s'" %
+                            kwargs.keys()[0])
+        self.init_table(data)
+
+    def init_table(self, data):
+
+        styles = getSampleStyleSheet()
+        sN = styles['Normal']
+        if 'font' in self.config:
+            sN.fontName = self.config['font']
+        if 'fontsize' in self.config:
+            sN.fontSize = self.config['fontsize']
+            sN.leading = sN.fontSize * 1.1
+
+        cell_data = [["" for x in range(12)] for y in range(3)]
+        # Row 1
+        cell_data[0][0] = Paragraph("<b>Name:</b><u> %s</u>" %
+                                    data['fullname'],
+                                    sN)
+        cell_data[0][6] = Paragraph("<b>Date:</b><u> %s</u>" %
+                                    data['date'],
+                                    sN)
+        cell_data[0][9] = Paragraph("<b>Case #:</b><u> %s</u>" %
+                                    data['case_no'],
+                                    sN)
+        # Row 2
+        cell_data[1][0] = Paragraph("<b>Room #:</b><u> %s</u>" %
+                                    data['case_no'],
+                                    sN)
+        cell_data[1][4] = Paragraph("<b>Age:</b><u> %s</u>" %
+                                    data['age'],
+                                    sN)
+        cell_data[1][8] = Paragraph("<b>Sex:</b><u> %s</u>" %
+                                    data['gender'],
+                                    sN)
+        # Row 3
+        cell_data[2][0] = Paragraph("<b>Requesting Physician:</b><u> %s</u>" %
+                                    data['physician'],
+                                    sN)
+        if 'width' in self.config:
+            width = self.config['width']
+        else:
+            width, height = landscape(A5)
+            self.config['width'] = width
+
+        self.table = Table(cell_data, colWidths=[width/12]*12)
+        self.table.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 1, black),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+            # Row 1
+            ('SPAN', (0, 0), (5, 0)),
+            ('SPAN', (6, 0), (8, 0)),
+            ('SPAN', (9, 0), (11, 0)),
+            # Row 2
+            ('SPAN', (0, 1), (3, 1)),
+            ('SPAN', (4, 1), (7, 1)),
+            ('SPAN', (8, 1), (11, 1)),
+            # Row 3
+            ('SPAN', (0, 2), (11, 2)),
+        ]))
+
+    def setData(self, obj, key, data):
+        if hasattr(obj, key):
+            data[key] = getattr(obj, key)
+
+    def split(self, availWidth, availHeight):
+        return []
+
+    def wrap(self, availWidth, availHeight):
+        width, height = self.table.wrap(availWidth, availHeight)
+        height += self.config.get('spacer', 2)
+        self.config['width'] = width
+        self.config['height'] = height
+        return (width, height)
+
+    #  def drawOn(self, canvas, x, y, _sW=0):
+    #    return self.table.drawOn(canvas, x, y, _sW)
+
+    def draw(self):
+        self.table.canv = self.canv
+        # self.table.drawOn(self.canv, 0, self.config.get('spacer', 2), 0)
+        self.table.drawOn(self.canv, 0, self.config.get('spacer', 2), 0)
+        # self.canv.rect(0, 0, 50, 50)a
+        width = self.config.get('width', landscape(A5)[0])
+        self.canv.line(0, 0, width, 0)
+
+
 def masterInfo(doc):
     data = [
         ["Name", "Patient Fullname",
@@ -146,7 +259,7 @@ def masterInfo(doc):
     # Row 1
     data[0][0] = Paragraph("<b>Name:</b><u> Pelicano, Rochelle</u>", sN)
     data[0][6] = Paragraph("<b>Date:</b><u> 06/02/2016</u>", sN)
-    data[0][10] = Paragraph("<b>Case #:</b><u> 145591</u>", sN)
+    data[0][9] = Paragraph("<b>Case #:</b><u> 145591</u>", sN)
     # Row 2
     data[1][0] = Paragraph("<b>Room #:</b><u> OPD</u>", sN)
     data[1][4] = Paragraph("<b>Age:</b><u> 5</u>", sN)
@@ -164,8 +277,8 @@ def masterInfo(doc):
         ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
         # Row 1
         ('SPAN', (0, 0), (5, 0)),
-        ('SPAN', (6, 0), (9, 0)),
-        ('SPAN', (10, 0), (11, 0)),
+        ('SPAN', (6, 0), (8, 0)),
+        ('SPAN', (9, 0), (11, 0)),
         # Row 2
         ('SPAN', (0, 1), (3, 1)),
         ('SPAN', (4, 1), (7, 1)),
@@ -199,6 +312,10 @@ def test():
 
     width, height = doc.pagesize
     story.append(masterInfo(doc))
+    story.append(
+        MasterInfo(
+            fullname='Full Name',
+        ))
     story.append(toc)
     story.append(PageBreak())
     story.append(Paragraph('First heading', h1))
