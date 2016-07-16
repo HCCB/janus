@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import os.path
+import datetime
+
 # from collections import defaultdict
 # from itertools import chain
 
@@ -55,16 +57,6 @@ class ReportTemplate(BaseDocTemplate):
                                 pagesize=self.pagesize)
         self.loadFonts()
         self.addPageTemplates(template)
-
-    def afterFlowable(self, flowable):
-        """Register TOC entries"""
-        if flowable.__class__.__name__ == 'Paragraph':
-            text = flowable.getPlainText()
-            style = flowable.style.name
-            if style == 'Heading1':
-                self.notify('TOCEntry', (0, text, self.page))
-            if style == 'Heading2':
-                self.notify('TOCEntry', (1, text, self.page))
 
     def beforePage(self):
         self.canv.saveState()
@@ -146,7 +138,8 @@ class MasterInfo(Flowable):
                 del kwargs[k]
 
         self.config = {}
-        for k in ['font', 'fontsize', 'offset', 'width', 'spacer']:
+        for k in ['font', 'fontsize', 'offset', 'width',
+                  'leftmargin', 'rightmargin']:
             if k in kwargs:
                 # setattr(self, k, kwargs[k])
                 self.config[k] = kwargs[k]
@@ -172,8 +165,14 @@ class MasterInfo(Flowable):
         cell_data[0][0] = Paragraph("<b>Name:</b><u> %s</u>" %
                                     data['fullname'],
                                     sN)
+        date_type = type(data['date'])
+        if date_type in [datetime.datetime, datetime.date]:
+            date = datetime.datetime.strftime(data['date'], "%m/%d/%Y")
+        else:
+            date = data['date']
+        print type(data['date'])
         cell_data[0][6] = Paragraph("<b>Date:</b><u> %s</u>" %
-                                    data['date'],
+                                    date,
                                     sN)
         cell_data[0][9] = Paragraph("<b>Case #:</b><u> %s</u>" %
                                     data['case_no'],
@@ -198,11 +197,17 @@ class MasterInfo(Flowable):
             width, height = landscape(A5)
             self.config['width'] = width
 
+        lm = self.config.get('leftmargin', 0)
+        rm = self.config.get('rightmargin', 0)
+        width -= lm + rm
+
         self.table = Table(cell_data, colWidths=[width/12]*12)
         self.table.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 1, black),
+            # ('GRID', (0, 0), (-1, -1), 1, black),
             ('TOPPADDING', (0, 0), (-1, -1), 0),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, -1), (0, -1), 3),
+            ('LINEBELOW', (0, -1), (-1, -1), 1, black),
             # Row 1
             ('SPAN', (0, 0), (5, 0)),
             ('SPAN', (6, 0), (8, 0)),
@@ -224,21 +229,10 @@ class MasterInfo(Flowable):
 
     def wrap(self, availWidth, availHeight):
         width, height = self.table.wrap(availWidth, availHeight)
-        height += self.config.get('spacer', 2)
-        self.config['width'] = width
-        self.config['height'] = height
         return (width, height)
 
-    #  def drawOn(self, canvas, x, y, _sW=0):
-    #    return self.table.drawOn(canvas, x, y, _sW)
-
-    def draw(self):
-        self.table.canv = self.canv
-        # self.table.drawOn(self.canv, 0, self.config.get('spacer', 2), 0)
-        self.table.drawOn(self.canv, 0, self.config.get('spacer', 2), 0)
-        # self.canv.rect(0, 0, 50, 50)a
-        width = self.config.get('width', landscape(A5)[0])
-        self.canv.line(0, 0, width, 0)
+    def drawOn(self, canvas, x, y, _sW=0):
+        return self.table.drawOn(canvas, x, y, _sW)
 
 
 def masterInfo(doc):
@@ -315,6 +309,9 @@ def test():
     story.append(
         MasterInfo(
             fullname='Full Name',
+            date=datetime.datetime.today().date(),
+            leftmargin=10,
+            rightmargin=10,
         ))
     story.append(toc)
     story.append(PageBreak())
