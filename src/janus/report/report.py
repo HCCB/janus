@@ -235,54 +235,6 @@ class MasterInfo(Flowable):
         return self.table.drawOn(canvas, x, y, _sW)
 
 
-def masterInfo(doc):
-    data = [
-        ["Name", "Patient Fullname",
-         "Date", "12/12/2016",
-         "Case #:", "168698"],
-        ["Room #:", "OPD", "Age:", "5", "Gender:", "Female"],
-        ["Requesting Physician:", "Dr. Lagare"]
-    ]
-    # data = [["%X" % (y*16+x) for x in range(12)] for y in range(3)]
-    data = [["" for x in range(12)] for y in range(3)]
-    styles = getSampleStyleSheet()
-    sN = styles["Normal"]
-    sN.spaceBefore = 0
-    sN.spaceAfter = 2
-    # sN.leading = 0
-    # Row 1
-    data[0][0] = Paragraph("<b>Name:</b><u> Pelicano, Rochelle</u>", sN)
-    data[0][6] = Paragraph("<b>Date:</b><u> 06/02/2016</u>", sN)
-    data[0][9] = Paragraph("<b>Case #:</b><u> 145591</u>", sN)
-    # Row 2
-    data[1][0] = Paragraph("<b>Room #:</b><u> OPD</u>", sN)
-    data[1][4] = Paragraph("<b>Age:</b><u> 5</u>", sN)
-    data[1][8] = Paragraph("<b>Sex:</b><u> Female</u>", sN)
-    # Row 3
-    data[2][0] = Paragraph("<b>Requesting Physician:</b>" +
-                           "<u> Dr. Lagarei</u>", sN)
-
-    width, height = doc.pagesize
-    w = width - (doc.leftMargin * 2)
-    t = Table(data, colWidths=[w/12]*12)
-    t.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 1, black),
-        ('TOPPADDING', (0, 0), (-1, -1), 0),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
-        # Row 1
-        ('SPAN', (0, 0), (5, 0)),
-        ('SPAN', (6, 0), (8, 0)),
-        ('SPAN', (9, 0), (11, 0)),
-        # Row 2
-        ('SPAN', (0, 1), (3, 1)),
-        ('SPAN', (4, 1), (7, 1)),
-        ('SPAN', (8, 1), (11, 1)),
-        # Row 3
-        ('SPAN', (0, 2), (11, 2)),
-    ]))
-    return t
-
-
 def test():
     h1 = PS(name='Heading1',
             fontSize=14,
@@ -305,7 +257,6 @@ def test():
     toc.levelStyle = [h1, h2]
 
     width, height = doc.pagesize
-    story.append(masterInfo(doc))
     story.append(
         MasterInfo(
             fullname='Full Name',
