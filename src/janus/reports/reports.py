@@ -192,8 +192,8 @@ class MasterInfo(Flowable):
             width, height = landscape(A5)
             self.config['width'] = width
 
-        lm = self.config.get('leftmargin', 0)
-        rm = self.config.get('rightmargin', 0)
+        lm = self.config.get('leftmargin', 10)
+        rm = self.config.get('rightmargin', 10)
         width -= lm + rm
 
         self.table = Table(cell_data, colWidths=[width/12]*12)

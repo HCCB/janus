@@ -1,12 +1,16 @@
+import StringIO
 # from django.shortcuts import render
 from django.http import HttpResponse
 
 from rest_framework import viewsets
 # , permissions
-from reportlab.pdfgen import canvas
+# from reportlab.pdfgen import canvas
+from reportlab.platypus.paragraph import Paragraph
+from reportlab.lib.styles import ParagraphStyle as PS
 
 from serializers import PatientSerializer
 from models import Patient
+from reports.reports import ReportTemplate, MasterInfo
 
 
 class PatientViewSet(viewsets.ModelViewSet):
@@ -18,14 +22,20 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 
 def pdf_view(request):
+    buff = StringIO.StringIO()
+
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename="report.pdf"'
-    p = canvas.Canvas(response)
-    p.init_graphics_state()
 
-    p.drawString(100, 100, "Hello world.")
+    doc = ReportTemplate(buff)
 
-    p.showPage()
-    p.save()
+    story = []
+    story.append(MasterInfo())
+    story.append(Paragraph('Text in first heading', PS('body')))
+
+    doc.multiBuild(story)
+
+    response.write(buff.getvalue())
+    buff.close()
 
     return response
