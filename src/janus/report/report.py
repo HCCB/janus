@@ -2,14 +2,10 @@
 import os.path
 import datetime
 
-# from collections import defaultdict
-# from itertools import chain
-
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
 from reportlab.platypus.paragraph import Paragraph
 from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
-from reportlab.platypus.tableofcontents import TableOfContents
 from reportlab.platypus.frames import Frame
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A5, landscape
@@ -170,7 +166,6 @@ class MasterInfo(Flowable):
             date = datetime.datetime.strftime(data['date'], "%m/%d/%Y")
         else:
             date = data['date']
-        print type(data['date'])
         cell_data[0][6] = Paragraph("<b>Date:</b><u> %s</u>" %
                                     date,
                                     sN)
@@ -249,14 +244,7 @@ def test():
     doc = ReportTemplate('mintoc.pdf')
     # Build story.
     story = []
-    toc = TableOfContents()
 
-    # header = HeaderFlowable()
-
-    # For conciseness we use the same styles for headings and TOC entries
-    toc.levelStyle = [h1, h2]
-
-    width, height = doc.pagesize
     story.append(
         MasterInfo(
             fullname='Full Name',
@@ -264,7 +252,6 @@ def test():
             leftmargin=10,
             rightmargin=10,
         ))
-    story.append(toc)
     story.append(PageBreak())
     story.append(Paragraph('First heading', h1))
     story.append(Paragraph('Text in first heading', PS('body')))
