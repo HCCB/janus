@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os.path
 import datetime
+from itertools import chain
 
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
@@ -119,24 +120,31 @@ class ReportTemplate(BaseDocTemplate):
 
 
 class MasterInfo(Flowable):
+    KEYS = {
+        'master': ['patient', 'date', 'room_number',
+                   'case_number', 'physician'],
+        'patient': ['fullname', 'age', 'gender'],
+    }
+
+    def process_kwarg(self, data, kwargs):
+        for objname in self.KEYS.keys():
+            if objname in kwargs.keys():
+                o = kwargs[objname]
+                for k in self.KEYS[objname]:
+                    data[k] = getattr(o, k)
+                del kwargs[objname]
+
+        p = data.get('patient', None)
+        for k in chain(*self.KEYS.values()):
+            if k in kwargs.keys():
+                data[k] = kwargs[k]
+                del kwargs[k]
+            elif p and hasattr(p, k):
+                data[k] = getattr(p, k)
+
     def __init__(self, **kwargs):
         data = {}
-        p = kwargs.get('patient', None)
-        if p:
-            for k in ['fullname', 'age', 'gender']:
-                self.setData(p, k, data)
-            del kwargs['patient']
-
-        for k in ['fullname', 'age', 'gender', 'date',
-                  'room_no', 'physician', 'case_no']:
-            v = kwargs.get(k, None)
-            if v:
-                data[k] = v
-            else:
-                if k not in data.keys():
-                    data[k] = "NO_VALUE"
-            if k in kwargs:
-                del kwargs[k]
+        self.process_kwarg(data, kwargs)
 
         self.config = {}
         for k in ['font', 'fontsize', 'offset', 'width',
@@ -175,11 +183,11 @@ class MasterInfo(Flowable):
                                     date,
                                     sN)
         cell_data[0][9] = Paragraph("<b>Case #:</b><u> %s</u>" %
-                                    data['case_no'],
+                                    data['case_number'],
                                     sN)
         # Row 2
         cell_data[1][0] = Paragraph("<b>Room #:</b><u> %s</u>" %
-                                    data['case_no'],
+                                    data['room_number'],
                                     sN)
         cell_data[1][4] = Paragraph("<b>Age:</b><u> %s</u>" %
                                     data['age'],
@@ -219,10 +227,6 @@ class MasterInfo(Flowable):
             # Row 3
             ('SPAN', (0, 2), (11, 2)),
         ]))
-
-    def setData(self, obj, key, data):
-        if hasattr(obj, key):
-            data[key] = getattr(obj, key)
 
     def split(self, availWidth, availHeight):
         return []

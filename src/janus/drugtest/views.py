@@ -1,5 +1,5 @@
-import StringIO
-import datetime
+from io import BytesIO
+# import datetime
 
 # from django.shortcuts import render
 from django.http import HttpResponse
@@ -9,6 +9,7 @@ from rest_framework import viewsets
 # from reportlab.pdfgen import canvas
 from reportlab.platypus.paragraph import Paragraph
 from reportlab.lib.styles import ParagraphStyle as PS
+from reportlab.platypus import PageBreak as BR
 
 from serializers import PatientSerializer
 from models import Patient
@@ -38,24 +39,35 @@ def pdf_view(request):
 
 def generate_pdf():
 
-    buff = StringIO.StringIO()
-
     m = ResultMaster.objects.first()
-    p = m.patient
+    # p = m.patient
 
-    doc = ReportTemplate(buff)
+    buff = BytesIO()
+    try:
+        doc = ReportTemplate(buff)
 
-    story = []
-    story.append(MasterInfo(
-        patient=p,
-        date=datetime.datetime.now(),
-    ))
-    story.append(Paragraph('Text in first heading', PS('body')))
+        story = []
+        story.append(MasterInfo(
+            # patient=p,
+            # date=datetime.datetime.now(),
+            # room_no='OPD',
+            # case_no='1234567890',
+            # physician='Dr. Doctor',
+            master=m,
+            # fullname='blue cuenca',
+        ))
+        story.append(Paragraph(m.title, PS('H1')))
+        story.append(Paragraph('Text in first heading', PS('body')))
 
-    doc.multiBuild(story)
+        story.append(BR())
 
-    raw_value = buff.getvalue()
+        story.append(MasterInfo(master=m))
+        story.append(Paragraph('Next one', PS('body')))
+        doc.multiBuild(story)
 
-    buff.close()
+        buff.flush()
+        raw_value = buff.getvalue()
+    finally:
+        buff.close()
 
     return raw_value
