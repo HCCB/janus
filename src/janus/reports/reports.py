@@ -129,7 +129,12 @@ class MasterInfo(Flowable):
 
         for k in ['fullname', 'age', 'gender', 'date',
                   'room_no', 'physician', 'case_no']:
-            data[k] = kwargs.get(k, "NO_VALUE_SET")
+            v = kwargs.get(k, None)
+            if v:
+                data[k] = v
+            else:
+                if k not in data.keys():
+                    data[k] = "NO_VALUE"
             if k in kwargs:
                 del kwargs[k]
 

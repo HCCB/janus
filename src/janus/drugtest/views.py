@@ -1,4 +1,6 @@
 import StringIO
+import datetime
+
 # from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -10,6 +12,7 @@ from reportlab.lib.styles import ParagraphStyle as PS
 
 from serializers import PatientSerializer
 from models import Patient
+from models import ResultMaster
 from reports.reports import ReportTemplate, MasterInfo
 
 
@@ -22,20 +25,37 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 
 def pdf_view(request):
-    buff = StringIO.StringIO()
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename="report.pdf"'
 
+    raw = generate_pdf()
+
+    response.write(raw)
+
+    return response
+
+
+def generate_pdf():
+
+    buff = StringIO.StringIO()
+
+    m = ResultMaster.objects.first()
+    p = m.patient
+
     doc = ReportTemplate(buff)
 
     story = []
-    story.append(MasterInfo())
+    story.append(MasterInfo(
+        patient=p,
+        date=datetime.datetime.now(),
+    ))
     story.append(Paragraph('Text in first heading', PS('body')))
 
     doc.multiBuild(story)
 
-    response.write(buff.getvalue())
+    raw_value = buff.getvalue()
+
     buff.close()
 
-    return response
+    return raw_value
