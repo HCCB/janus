@@ -130,6 +130,7 @@ class ResultMaster(models.Model):
     case_number = models.CharField(max_length=30)
     room_number = models.CharField(max_length=20)
     date = models.DateField(default=datetime.now)
+    physician = models.ForeignKey(Physician)
     title = models.CharField(max_length=60)  # generally same as tests' category
 
     def __unicode__(self):
