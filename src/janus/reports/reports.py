@@ -47,7 +47,7 @@ class ReportTemplate(BaseDocTemplate):
         frame = Frame(self.leftMargin, self.bottomMargin,
                       fw, fh,
                       id='ContentFrame',
-                      showBoundary=True)
+                      showBoundary=False)
 
         template = PageTemplate('normal', frames=[frame, ],
                                 pagesize=self.pagesize)
