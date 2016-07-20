@@ -11,6 +11,8 @@ from reportlab.platypus.paragraph import Paragraph
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak as BR
 
+from reportlab.lib.styles import getSampleStyleSheet
+
 from serializers import PatientSerializer
 from models import Patient
 from models import ResultMaster
@@ -46,6 +48,8 @@ def generate_pdf():
     try:
         doc = ReportTemplate(buff)
 
+        styles = getSampleStyleSheet()
+        style_list = list(styles.byName.items())
         story = []
         story.append(MasterInfo(
             # patient=p,
@@ -56,13 +60,16 @@ def generate_pdf():
             master=m,
             # fullname='blue cuenca',
         ))
-        story.append(Paragraph(m.title, PS('H1')))
+        story.append(Paragraph(m.title, styles['Title']))
         story.append(Paragraph('Text in first heading', PS('body')))
 
         story.append(BR())
 
         story.append(MasterInfo(master=m))
-        story.append(Paragraph('Next one', PS('body')))
+
+        for stylename, style in style_list:
+            story.append(Paragraph(stylename, style))
+
         doc.multiBuild(story)
 
         buff.flush()
