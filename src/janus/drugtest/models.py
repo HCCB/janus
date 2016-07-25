@@ -14,6 +14,13 @@ GENDER_CHOICES = [
     ('F', 'Female'),
 ]
 
+MEDTECH = 1
+PATHOLOGIST = 2
+DESIGNATION_CHOICES = (
+    (MEDTECH, 'Medical Technologist'),
+    (PATHOLOGIST, 'Pathologist'),
+)
+
 
 def mkfld_name(**kargs):
     kargs.setdefault('max_length', 60)
@@ -66,8 +73,10 @@ class Physician(Person):
 
 
 class Staff(Person):
-    designation = models.CharField(max_length=60)
+    designation = models.SmallIntegerField(choices=DESIGNATION_CHOICES,
+                                           default=MEDTECH)
     suffix = models.CharField(max_length=20)
+    license = models.CharField(max_length=60, blank=True, default='')
 
     def _get_suffix(self):
         return u", %s" % self.suffix if self.suffix.strip() else u""
@@ -132,6 +141,13 @@ class ResultMaster(models.Model):
     date = models.DateField(default=datetime.now)
     physician = models.ForeignKey(Physician)
     title = models.CharField(max_length=60)  # generally same as tests' category
+
+    medical_technologist = models.ForeignKey(Staff, related_name="MedTech",
+                                             blank=True,
+                                             null=True)
+    pathologist = models.ForeignKey(Staff, related_name='Pathologist',
+                                    blank=True,
+                                    null=True)
 
     def __unicode__(self):
         return u"%s #: %s - %s" % (

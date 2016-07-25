@@ -14,7 +14,7 @@ from reportlab.lib.pagesizes import A5, landscape
 
 from reportlab.platypus.tables import Table, TableStyle
 
-from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
 
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
@@ -258,13 +258,24 @@ class Report(object):
         for row in self.master.resultdetail_set.all():
             result_list = row.result.split(',')
             component_list = row.analysis.components.split(',')
+            ref_list = row.analysis.reference_text.split(',')
             txt = row.analysis.name
             s2 = self.styles['Heading2']
             s2.alignment = TA_CENTER
+
+            sN = self.styles['Normal']
+            sN.alignment = TA_LEFT
             yield Paragraph(txt, self.styles['Heading2'])
             for idx, component in enumerate(component_list):
-                txt = '%s: %s' % (component, result_list[idx])
-                yield Paragraph(txt, self.styles['Normal'])
+                if ref_list[idx]:
+                    txt = '%s: %s (%s)' % (component,
+                                           result_list[idx],
+                                           ref_list[idx])
+                else:
+                    txt = '%s: %s' % (component, result_list[idx])
+                    sN.alignment = TA_CENTER
+                print "Alignment = ", sN.alignment
+                yield Paragraph(txt, sN)
 
     def render(self):
         buff = BytesIO()
