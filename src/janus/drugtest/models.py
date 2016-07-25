@@ -108,7 +108,7 @@ class Analysis(models.Model):
     short_name = models.CharField(max_length=30, blank=True, default='')
     result_type = models.SmallIntegerField(
         choices=RESULT_TYPE_CHOICE, default=2)
-    reference_text = models.CharField(max_length=30, blank=True, default='')
+    reference_text = models.CharField(max_length=100, blank=True, default='')
 
     components = models.CharField(max_length=100, blank=True, default='RESULT')
 

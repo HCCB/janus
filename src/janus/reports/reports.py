@@ -2,6 +2,7 @@
 import os.path
 import datetime
 from itertools import chain
+from io import BytesIO
 
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
@@ -131,7 +132,11 @@ class MasterInfo(Flowable):
             if objname in kwargs.keys():
                 o = kwargs[objname]
                 for k in self.KEYS[objname]:
-                    data[k] = getattr(o, k)
+                    display = 'get_%s_display' % k
+                    if hasattr(o, display):
+                        data[k] = getattr(o, display)()
+                    else:
+                        data[k] = getattr(o, k)
                 del kwargs[objname]
 
         p = data.get('patient', None)
@@ -140,7 +145,11 @@ class MasterInfo(Flowable):
                 data[k] = kwargs[k]
                 del kwargs[k]
             elif p and hasattr(p, k):
-                data[k] = getattr(p, k)
+                display = 'get_%s_display' % k
+                if hasattr(p, display):
+                    data[k] = getattr(p, display)()
+                else:
+                    data[k] = getattr(p, k)
 
     def __init__(self, **kwargs):
         data = {}
@@ -172,7 +181,7 @@ class MasterInfo(Flowable):
         cell_data = [["" for x in range(12)] for y in range(3)]
         # Row 1
         cell_data[0][0] = Paragraph("<b>Name:</b><u> %s</u>" %
-                                    data['fullname'],
+                                    data.get('fullname', 'NO_VALUE'),
                                     sN)
         date_type = type(data['date'])
         if date_type in [datetime.datetime, datetime.date]:
@@ -183,21 +192,21 @@ class MasterInfo(Flowable):
                                     date,
                                     sN)
         cell_data[0][9] = Paragraph("<b>Case #:</b><u> %s</u>" %
-                                    data['case_number'],
+                                    data.get('case_number', 'NO_VALUE'),
                                     sN)
         # Row 2
         cell_data[1][0] = Paragraph("<b>Room #:</b><u> %s</u>" %
-                                    data['room_number'],
+                                    data.get('room_number', 'NO_VALUE'),
                                     sN)
         cell_data[1][4] = Paragraph("<b>Age:</b><u> %s</u>" %
                                     data['age'],
                                     sN)
         cell_data[1][8] = Paragraph("<b>Sex:</b><u> %s</u>" %
-                                    data['gender'],
+                                    data.get('gender', 'NO_VALUE'),
                                     sN)
         # Row 3
         cell_data[2][0] = Paragraph("<b>Requesting Physician:</b><u> %s</u>" %
-                                    data['physician'],
+                                    data.get('physician', 'NO_VALUE'),
                                     sN)
         if 'width' in self.config:
             width = self.config['width']
@@ -239,7 +248,50 @@ class MasterInfo(Flowable):
         return self.table.drawOn(canvas, x, y, _sW)
 
 
+class Report(object):
+    def __init__(self, master):
+        super(Report, self).__init__()
+        self.master = master
+        self.styles = getSampleStyleSheet()
+
+    def rows(self):
+        for row in self.master.resultdetail_set.all():
+            result_list = row.result.split(',')
+            component_list = row.analysis.components.split(',')
+            txt = row.analysis.name
+            s2 = self.styles['Heading2']
+            s2.alignment = TA_CENTER
+            yield Paragraph(txt, self.styles['Heading2'])
+            for idx, component in enumerate(component_list):
+                txt = '%s: %s' % (component, result_list[idx])
+                yield Paragraph(txt, self.styles['Normal'])
+
+    def render(self):
+        buff = BytesIO()
+        try:
+            doc = ReportTemplate(buff)
+            styles = self.styles
+            story = []
+
+            story.append(MasterInfo(master=self.master))
+            story.append(Paragraph(self.master.title, styles['Title']))
+
+            for row in self.rows():
+                story.append(row)
+
+            doc.multiBuild(story)
+            buff.flush()
+
+            raw_value = buff.getvalue()
+        finally:
+            buff.close()
+
+        return raw_value
+
+
 def test():
+    r = Report(None)
+    print r
     h1 = PS(name='Heading1',
             fontSize=14,
             leading=16
@@ -257,6 +309,10 @@ def test():
     story.append(
         MasterInfo(
             fullname='Full Name',
+            case_number='1234567',
+            room_number='OPD',
+            age='23',
+            gender='F',
             date=datetime.datetime.today().date(),
             leftmargin=10,
             rightmargin=10,

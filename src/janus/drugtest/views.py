@@ -16,7 +16,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from serializers import PatientSerializer
 from models import Patient
 from models import ResultMaster
-from reports.reports import ReportTemplate, MasterInfo
+from reports.reports import ReportTemplate, MasterInfo, Report
 
 
 class PatientViewSet(viewsets.ModelViewSet):
@@ -32,9 +32,13 @@ def pdf_view(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename="report.pdf"'
 
-    raw = generate_pdf()
+    m = ResultMaster.objects.first()
 
-    response.write(raw)
+    r = Report(m)
+
+    # raw = generate_pdf()
+    # response.write(raw)
+    response.write(r.render())
 
     return response
 
