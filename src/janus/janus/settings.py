@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 
     'webpack_loader',
     'rest_framework',
-    'tinymce',
 
     'drugtest',
 ]
@@ -160,6 +159,7 @@ if not DEBUG:
 
 # Django REST Framework Defaults and Settings:
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_PERMISSION_CLASSES':
+    ('rest_framework.permissions.IsAuthenticated',),
     'PAGE_SIZE': 10,
 }

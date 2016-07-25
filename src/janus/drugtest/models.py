@@ -4,8 +4,6 @@ from datetime import datetime
 
 from django.db import models
 
-from tinymce.models import HTMLField
-
 RESULT_TYPE_CHOICE = (
     (1, 'Numeric'),
     (2, 'Text'),
@@ -110,7 +108,9 @@ class Analysis(models.Model):
     short_name = models.CharField(max_length=30, blank=True, default='')
     result_type = models.SmallIntegerField(
         choices=RESULT_TYPE_CHOICE, default=2)
-    reference_text = HTMLField(blank=True, default='')
+    reference_text = models.CharField(max_length=30, blank=True, default='')
+
+    components = models.CharField(max_length=100, blank=True, default='RESULT')
 
     profiles = models.ManyToManyField(to=TestProfile, blank=True)
 
@@ -143,7 +143,7 @@ class ResultMaster(models.Model):
 class ResultDetail(models.Model):
     master = models.ForeignKey(ResultMaster)
     analysis = models.ForeignKey(Analysis)
-    result = HTMLField()
+    result = models.CharField(max_length=100, blank=True, default='')
 
     def __unicode__(self):
         return u"%s: %s" % (
