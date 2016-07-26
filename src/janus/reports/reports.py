@@ -3,6 +3,7 @@ import os.path
 import datetime
 from itertools import chain
 from io import BytesIO
+from collections import defaultdict
 
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
@@ -248,6 +249,44 @@ class MasterInfo(Flowable):
         return self.table.drawOn(canvas, x, y, _sW)
 
 
+class Signatories(Flowable):
+    def __init__(self, master):
+        Flowable.__init__(self)
+        self.master = master
+        if master.medical_technologist or master.pathologist:
+            self.has_data = True
+        else:
+            self.has_data = False
+
+    def init_table(self):
+        styles = getSampleStyleSheet()
+        sN = styles['Normal']
+        self.data = defaultdict(str)
+
+        self.data[0][0] = Paragraph("%s\n%s\n%s" % (
+            self.master.pathologist.fullname,
+            self.master.pathologist.get_designation_display(),
+            self.master.pathologist.license
+        ), sN)
+
+        self.data[1][0] = Paragraph("%s\n%s\n%s" % (
+            self.master.medical_technician.fullname,
+            self.master.medical_technician.get_designation_display(),
+            self.master.medical_technician.license
+        ), sN)
+
+    def split(self, availWidth, availHeight):
+        return []
+
+    def wrap(self, availWidth, availHeight):
+        print self.canv
+
+        return (availWidth, availHeight)
+
+    def drawOn(self, canvas, x, y, _sW=0):
+        pass
+
+
 class Report(object):
     def __init__(self, master):
         super(Report, self).__init__()
@@ -276,6 +315,7 @@ class Report(object):
                     sN.alignment = TA_CENTER
                 print "Alignment = ", sN.alignment
                 yield Paragraph(txt, sN)
+            yield Signatories(self.master)
 
     def render(self):
         buff = BytesIO()
