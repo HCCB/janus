@@ -3,7 +3,6 @@ import os.path
 import datetime
 from itertools import chain
 from io import BytesIO
-from collections import defaultdict
 
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
@@ -250,41 +249,72 @@ class MasterInfo(Flowable):
 
 
 class Signatories(Flowable):
-    def __init__(self, master):
+    def __init__(self, master, margin=10):
         Flowable.__init__(self)
         self.master = master
+        self.margin = 10
         if master.medical_technologist or master.pathologist:
             self.has_data = True
         else:
             self.has_data = False
 
-    def init_table(self):
-        styles = getSampleStyleSheet()
-        sN = styles['Normal']
-        self.data = defaultdict(str)
-
-        self.data[0][0] = Paragraph("%s\n%s\n%s" % (
-            self.master.pathologist.fullname,
-            self.master.pathologist.get_designation_display(),
-            self.master.pathologist.license
-        ), sN)
-
-        self.data[1][0] = Paragraph("%s\n%s\n%s" % (
-            self.master.medical_technician.fullname,
-            self.master.medical_technician.get_designation_display(),
-            self.master.medical_technician.license
-        ), sN)
-
     def split(self, availWidth, availHeight):
         return []
 
     def wrap(self, availWidth, availHeight):
-        print self.canv
+        return self.do_table_wrap(availWidth, availHeight)
 
-        return (availWidth, availHeight)
+    def do_table_wrap(self, availWidth, availHeight):
+        styles = getSampleStyleSheet()
+        sN = styles['Normal']
+        sN.alignment = TA_CENTER
+        data = [["" for x in range(12)] for y in range(3)]
 
-    def drawOn(self, canvas, x, y, _sW=0):
-        pass
+        data[0][1] = Paragraph("<br/><br/><strong>%s</strong>" %
+                               self.master.pathologist.fullname, sN)
+        data[1][1] = Paragraph(self.master.pathologist.
+                               get_designation_display(), sN)
+        data[2][1] = Paragraph("PRC LIC #: %s" %
+                               self.master.pathologist.license, sN)
+
+        data[0][7] = Paragraph("<br/><br/><br/><strong>%s</strong>" %
+                               self.master.medical_technologist.fullname, sN)
+        data[1][7] = Paragraph(self.master.medical_technologist.
+                               get_designation_display(), sN)
+        data[2][7] = Paragraph("PRC LIC #: %s" %
+                               self.master.medical_technologist.license, sN)
+
+        w = availWidth - self.margin * 2
+        spacer = int(w / 10)
+        remWidth = (w - (spacer * 4)) / 8
+        colWidths = [spacer] + \
+            [remWidth] * 4 + \
+            [spacer] * 2 + \
+            [remWidth] * 4 + \
+            [spacer]
+        self.table = Table(data, colWidths=colWidths)
+        self.table.setStyle(TableStyle([
+            # config padding
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+            # lines
+            ('LINEBELOW', (1, 0), (4, 0), 1, black),
+            ('LINEBELOW', (7, 0), (10, 0), 1, black),
+            # ('GRID', (0, 0), (-1, -1), 1, black),
+            # Column 1
+            ('SPAN', (1, 0), (4, 0)),
+            ('SPAN', (1, 1), (4, 1)),
+            ('SPAN', (1, 2), (4, 2)),
+            # Column 2
+            ('SPAN', (7, 0), (10, 0)),
+            ('SPAN', (7, 1), (10, 1)),
+            ('SPAN', (7, 2), (10, 2)),
+        ]))
+        self.table.canv = self.canv
+        return self.table.wrap(availWidth, availHeight)
+
+    def draw(self):
+        self.table.draw()
 
 
 class Report(object):
@@ -313,7 +343,6 @@ class Report(object):
                 else:
                     txt = '%s: %s' % (component, result_list[idx])
                     sN.alignment = TA_CENTER
-                print "Alignment = ", sN.alignment
                 yield Paragraph(txt, sN)
             yield Signatories(self.master)
 
