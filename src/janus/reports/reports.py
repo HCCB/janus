@@ -317,6 +317,10 @@ class Signatories(Flowable):
         self.table.draw()
 
 
+class Grid(Flowable):
+    pass
+
+
 class Report(object):
     def __init__(self, master):
         super(Report, self).__init__()
