@@ -2,6 +2,8 @@
 import os.path
 import datetime
 from itertools import chain
+from itertools import zip_longest
+
 from io import BytesIO
 
 from reportlab.lib.styles import ParagraphStyle as PS
@@ -317,8 +319,64 @@ class Signatories(Flowable):
         self.table.draw()
 
 
-class Grid(Flowable):
-    pass
+class Details(Flowable):
+    def __init__(self,
+                 results,
+                 components,
+                 references,
+                 title=""):
+        self.styles = getSampleStyleSheet()
+        self.has_references = bool(references)
+        comps = components.split(',')
+        res = results.split(',')
+        # self.data = [["" for x in range(3)] for y in len(comps)]
+        self.data = []
+        if self.has_references:
+            ref = references.split(",")
+            self.data.append([title, "", ""])
+            for t in zip_longest(comps, res, ref, fillvalue="XXX"):
+                self.data.append(list(t))
+        else:
+            self.data.append([title, ""])
+            for t in zip_longest(comps, res, fillvalue="XXX"):
+                self.data.append(list(t))
+
+    def split(self, availWidth, availHeight):
+        return []  # do not split
+
+    def wrap(self, availWidth, availHeight):
+        width = availWidth * .8
+        colwidth = width / 3
+
+        row_count = len(self.data)
+        row_height = availHeight / row_count
+
+        fontsize = int((row_height * 1000) / 1.2)
+        if fontsize > 22:
+            fontsize = 22
+
+        sH = self.styles["Heading2"]
+        sH.fontSize = fontsize + 2
+        sH.leading = int((fontsize + 2) * 0.1)
+        sN = self.styles["Normal"]
+        sN.fontSize = fontsize
+        sN.leading = int(fontsize * 0.1)
+        data = []
+        for l in self.data:
+            row = []
+            for m in l:
+                if m:
+                    row.append(Paragraph(m, sN))
+                else:
+                    row.append("xxx")
+            data.append(row)
+
+        self.table = Table(data, colWidths=[colwidth]*3)
+        self.table.canv = self.canv
+        return self.table.wrap(width, availHeight)
+
+    def draw(self):
+        self.table.draw()
 
 
 class Report(object):
