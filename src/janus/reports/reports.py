@@ -2,6 +2,7 @@
 import os.path
 import datetime
 from itertools import chain
+from io import BytesIO
 
 from reportlab.lib.styles import ParagraphStyle as PS
 from reportlab.platypus import PageBreak
@@ -13,7 +14,7 @@ from reportlab.lib.pagesizes import A5, landscape
 
 from reportlab.platypus.tables import Table, TableStyle
 
-from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
 
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
@@ -131,7 +132,11 @@ class MasterInfo(Flowable):
             if objname in kwargs.keys():
                 o = kwargs[objname]
                 for k in self.KEYS[objname]:
-                    data[k] = getattr(o, k)
+                    display = 'get_%s_display' % k
+                    if hasattr(o, display):
+                        data[k] = getattr(o, display)()
+                    else:
+                        data[k] = getattr(o, k)
                 del kwargs[objname]
 
         p = data.get('patient', None)
@@ -140,7 +145,11 @@ class MasterInfo(Flowable):
                 data[k] = kwargs[k]
                 del kwargs[k]
             elif p and hasattr(p, k):
-                data[k] = getattr(p, k)
+                display = 'get_%s_display' % k
+                if hasattr(p, display):
+                    data[k] = getattr(p, display)()
+                else:
+                    data[k] = getattr(p, k)
 
     def __init__(self, **kwargs):
         data = {}
@@ -172,7 +181,7 @@ class MasterInfo(Flowable):
         cell_data = [["" for x in range(12)] for y in range(3)]
         # Row 1
         cell_data[0][0] = Paragraph("<b>Name:</b><u> %s</u>" %
-                                    data['fullname'],
+                                    data.get('fullname', 'NO_VALUE'),
                                     sN)
         date_type = type(data['date'])
         if date_type in [datetime.datetime, datetime.date]:
@@ -183,21 +192,21 @@ class MasterInfo(Flowable):
                                     date,
                                     sN)
         cell_data[0][9] = Paragraph("<b>Case #:</b><u> %s</u>" %
-                                    data['case_number'],
+                                    data.get('case_number', 'NO_VALUE'),
                                     sN)
         # Row 2
         cell_data[1][0] = Paragraph("<b>Room #:</b><u> %s</u>" %
-                                    data['room_number'],
+                                    data.get('room_number', 'NO_VALUE'),
                                     sN)
         cell_data[1][4] = Paragraph("<b>Age:</b><u> %s</u>" %
                                     data['age'],
                                     sN)
         cell_data[1][8] = Paragraph("<b>Sex:</b><u> %s</u>" %
-                                    data['gender'],
+                                    data.get('gender', 'NO_VALUE'),
                                     sN)
         # Row 3
         cell_data[2][0] = Paragraph("<b>Requesting Physician:</b><u> %s</u>" %
-                                    data['physician'],
+                                    data.get('physician', 'NO_VALUE'),
                                     sN)
         if 'width' in self.config:
             width = self.config['width']
@@ -239,7 +248,134 @@ class MasterInfo(Flowable):
         return self.table.drawOn(canvas, x, y, _sW)
 
 
+class Signatories(Flowable):
+    def __init__(self, master, margin=10):
+        Flowable.__init__(self)
+        self.master = master
+        self.margin = 10
+        if master.medical_technologist or master.pathologist:
+            self.has_data = True
+        else:
+            self.has_data = False
+
+    def split(self, availWidth, availHeight):
+        return []
+
+    def wrap(self, availWidth, availHeight):
+        return self.do_table_wrap(availWidth, availHeight)
+
+    def do_table_wrap(self, availWidth, availHeight):
+        styles = getSampleStyleSheet()
+        sN = styles['Normal']
+        sN.alignment = TA_CENTER
+        data = [["" for x in range(12)] for y in range(3)]
+
+        data[0][1] = Paragraph("<br/><br/><strong>%s</strong>" %
+                               self.master.pathologist.fullname, sN)
+        data[1][1] = Paragraph(self.master.pathologist.
+                               get_designation_display(), sN)
+        data[2][1] = Paragraph("PRC LIC #: %s" %
+                               self.master.pathologist.license, sN)
+
+        data[0][7] = Paragraph("<br/><br/><br/><strong>%s</strong>" %
+                               self.master.medical_technologist.fullname, sN)
+        data[1][7] = Paragraph(self.master.medical_technologist.
+                               get_designation_display(), sN)
+        data[2][7] = Paragraph("PRC LIC #: %s" %
+                               self.master.medical_technologist.license, sN)
+
+        w = availWidth - self.margin * 2
+        spacer = int(w / 10)
+        remWidth = (w - (spacer * 4)) / 8
+        colWidths = [spacer] + \
+            [remWidth] * 4 + \
+            [spacer] * 2 + \
+            [remWidth] * 4 + \
+            [spacer]
+        self.table = Table(data, colWidths=colWidths)
+        self.table.setStyle(TableStyle([
+            # config padding
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+            # lines
+            ('LINEBELOW', (1, 0), (4, 0), 1, black),
+            ('LINEBELOW', (7, 0), (10, 0), 1, black),
+            # ('GRID', (0, 0), (-1, -1), 1, black),
+            # Column 1
+            ('SPAN', (1, 0), (4, 0)),
+            ('SPAN', (1, 1), (4, 1)),
+            ('SPAN', (1, 2), (4, 2)),
+            # Column 2
+            ('SPAN', (7, 0), (10, 0)),
+            ('SPAN', (7, 1), (10, 1)),
+            ('SPAN', (7, 2), (10, 2)),
+        ]))
+        self.table.canv = self.canv
+        return self.table.wrap(availWidth, availHeight)
+
+    def draw(self):
+        self.table.draw()
+
+
+class Grid(Flowable):
+    pass
+
+
+class Report(object):
+    def __init__(self, master):
+        super(Report, self).__init__()
+        self.master = master
+        self.styles = getSampleStyleSheet()
+
+    def rows(self):
+        for row in self.master.resultdetail_set.all():
+            result_list = row.result.split(',')
+            component_list = row.analysis.components.split(',')
+            ref_list = row.analysis.reference_text.split(',')
+            txt = row.analysis.name
+            s2 = self.styles['Heading2']
+            s2.alignment = TA_CENTER
+
+            sN = self.styles['Normal']
+            sN.alignment = TA_LEFT
+            yield Paragraph(txt, self.styles['Heading2'])
+            for idx, component in enumerate(component_list):
+                if ref_list[idx]:
+                    txt = '%s: %s (%s)' % (component,
+                                           result_list[idx],
+                                           ref_list[idx])
+                else:
+                    txt = '%s: %s' % (component, result_list[idx])
+                    sN.alignment = TA_CENTER
+                yield Paragraph(txt, sN)
+            yield Signatories(self.master)
+
+    def render(self):
+        buff = BytesIO()
+        try:
+            doc = ReportTemplate(buff)
+            styles = self.styles
+            story = []
+
+            story.append(MasterInfo(master=self.master))
+            story.append(Paragraph(self.master.title, styles['Title']))
+
+            for row in self.rows():
+                story.append(row)
+
+            doc.multiBuild(story)
+            buff.flush()
+
+            raw_value = buff.getvalue()
+        finally:
+            buff.close()
+
+        return raw_value
+
+
 def test():
+    r = Report(None)
+    print r
     h1 = PS(name='Heading1',
             fontSize=14,
             leading=16
@@ -257,6 +393,10 @@ def test():
     story.append(
         MasterInfo(
             fullname='Full Name',
+            case_number='1234567',
+            room_number='OPD',
+            age='23',
+            gender='F',
             date=datetime.datetime.today().date(),
             leftmargin=10,
             rightmargin=10,
