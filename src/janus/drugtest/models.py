@@ -22,6 +22,16 @@ DESIGNATION_CHOICES = (
 )
 
 
+def calculate_age(born):
+    today = datetime.today()
+    years_old = today.year - born.year - ((today.month, today.day) <
+                                          (born.month, born.day))
+    months_old = today.month - born.month - (today.day < born.day)
+    days_old = today.day - born.day if today.day > born.day else 0
+
+    return (years_old, months_old, days_old)
+
+
 def mkfld_name(**kargs):
     kargs.setdefault('max_length', 60)
     kargs.setdefault('blank', False)
@@ -61,10 +71,14 @@ class Patient(Person):
     @property
     def age(self):
         """ compute patient's current age """
-        today = datetime.today()
-        born = self.birthdate
-        return today.year - born.year - \
-            ((today.month, today.day) < (born.month, born.day))
+
+        years, months, days = calculate_age(self.birthdate)
+        if years:
+            return "%d year%s old" % (years, "s" if years > 1 else "")
+        elif months:
+            return "%d month%s old" % (months, "s" if months > 1 else "")
+        else:
+            return "%d day%s old" % (days, "s" if days > 1 else "")
 
 
 class Physician(Person):
