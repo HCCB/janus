@@ -96,6 +96,10 @@ class Staff(Person):
         return u", %s" % self.suffix if self.suffix.strip() else u""
 
     def __unicode__(self):
+        return self.fullname
+
+    @property
+    def fullname(self):
         return "%s %s %s %s" % (
             self.given_name,
             self._get_mi(),
