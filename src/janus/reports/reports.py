@@ -2,8 +2,7 @@
 import os.path
 import datetime
 from itertools import chain
-from itertools import zip_longest
-
+# from itertools import zip_longest
 from io import BytesIO
 
 from reportlab.lib.styles import ParagraphStyle as PS
@@ -16,7 +15,8 @@ from reportlab.lib.pagesizes import A5, landscape
 
 from reportlab.platypus.tables import Table, TableStyle
 
-from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+# TA_LEFT
 
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
@@ -319,7 +319,7 @@ class Signatories(Flowable):
         self.table.draw()
 
 
-class Details(Flowable):
+class Detail(Flowable):
     def __init__(self,
                  results,
                  components,
@@ -327,18 +327,17 @@ class Details(Flowable):
                  title=""):
         self.styles = getSampleStyleSheet()
         self.has_references = bool(references)
+        self.title = title
         comps = components.split(',')
         res = results.split(',')
         # self.data = [["" for x in range(3)] for y in len(comps)]
         self.data = []
         if self.has_references:
             ref = references.split(",")
-            self.data.append([title, "", ""])
-            for t in zip_longest(comps, res, ref, fillvalue="XXX"):
+            for t in zip(comps, res, ref):
                 self.data.append(list(t))
         else:
-            self.data.append([title, ""])
-            for t in zip_longest(comps, res, fillvalue="XXX"):
+            for t in zip(comps, res):
                 self.data.append(list(t))
 
     def split(self, availWidth, availHeight):
@@ -351,27 +350,35 @@ class Details(Flowable):
         row_count = len(self.data)
         row_height = availHeight / row_count
 
-        fontsize = int((row_height * 1000) / 1.2)
-        if fontsize > 22:
-            fontsize = 22
+        fontsize = int((row_height * 1000) / 2)
+        if fontsize > 14:
+            fontsize = 14
 
         sH = self.styles["Heading2"]
         sH.fontSize = fontsize + 2
-        sH.leading = int((fontsize + 2) * 0.1)
         sN = self.styles["Normal"]
         sN.fontSize = fontsize
-        sN.leading = int(fontsize * 0.1)
+        sN.alignment = TA_CENTER
+        fontSmall = fontsize - 4
         data = []
         for l in self.data:
             row = []
-            for m in l:
+            for idx, m in enumerate(l):
                 if m:
+                    if idx == 0:
+                        sN.alignment = TA_RIGHT
+                    else:
+                        sN.alignment = TA_CENTER
+                    if idx == 2:
+                        sN.fontSize = fontSmall
+                    else:
+                        sN.fontSize = fontsize
                     row.append(Paragraph(m, sN))
                 else:
                     row.append("xxx")
             data.append(row)
 
-        self.table = Table(data, colWidths=[colwidth]*3)
+        self.table = Table(data, colWidths=[colwidth]*3, hAlign='CENTER')
         self.table.canv = self.canv
         return self.table.wrap(width, availHeight)
 
@@ -387,25 +394,10 @@ class Report(object):
 
     def rows(self):
         for row in self.master.resultdetail_set.all():
-            result_list = row.result.split(',')
-            component_list = row.analysis.components.split(',')
-            ref_list = row.analysis.reference_text.split(',')
-            txt = row.analysis.name
-            s2 = self.styles['Heading2']
-            s2.alignment = TA_CENTER
+            yield Detail(row.result,
+                         row.analysis.components,
+                         row.analysis.reference_text)
 
-            sN = self.styles['Normal']
-            sN.alignment = TA_LEFT
-            yield Paragraph(txt, self.styles['Heading2'])
-            for idx, component in enumerate(component_list):
-                if ref_list[idx]:
-                    txt = '%s: %s (%s)' % (component,
-                                           result_list[idx],
-                                           ref_list[idx])
-                else:
-                    txt = '%s: %s' % (component, result_list[idx])
-                    sN.alignment = TA_CENTER
-                yield Paragraph(txt, sN)
             yield Signatories(self.master)
 
     def render(self):
