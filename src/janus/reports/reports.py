@@ -287,7 +287,7 @@ class Signatories(Flowable):
                                self.master.medical_technologist.license, sN)
 
         w = availWidth - self.margin * 2
-        spacer = int(w / 10)
+        spacer = int(w * 0.05)
         remWidth = (w - (spacer * 4)) / 8
         colWidths = [spacer] + \
             [remWidth] * 4 + \
@@ -351,6 +351,8 @@ class Detail(Flowable):
         row_height = availHeight / row_count
 
         fontsize = int((row_height * 1000) / 2)
+        print "row_height = ", row_height
+        print "fontsize = ", fontsize
         if fontsize > 14:
             fontsize = 14
 
