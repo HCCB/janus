@@ -5,9 +5,8 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.pagesizes import A5, landscape
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.colors import black
 
-from data_common import *
+from data.common import Courier
 
 # load fonts
 import os.path
@@ -19,7 +18,7 @@ pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
 class BaseForm(object):
     def __init__(self, **kw):
         super(BaseForm, self).__init__()
-        
+
         self.positions = {}
 
         self.buff = BytesIO()
@@ -114,12 +113,12 @@ class BaseForm(object):
     def log(self, msg):
         if self.verbose:
             print msg
-            
+
     def add_form(self, formdata, **kw):
         template, xypositions = formdata
         self.positions.update(xypositions)
         self.draw_template(template, **kw)
-            
+
     def populate(self, dict, **kw):
         c = self.canvas
         ofsx = kw.get("ofsx", 0)
@@ -130,7 +129,7 @@ class BaseForm(object):
                 if self.verbose:
                     print "populate() item not found - %s" % k
                 continue
-            (x, y), (fontface, fontsize, color)  = positions[k]
+            (x, y), (fontface, fontsize, color) = positions[k]
             y = (self.height - y) - ofsy
             x = x + ofsx
             t = c.beginText(x, y)
@@ -142,19 +141,19 @@ class BaseForm(object):
 
 class FormElectrolytes(BaseForm):
     def __init__(self, **kw):
-        from data_master import MasterForm
+        from data.master import MasterForm
         super(FormElectrolytes, self).__init__(**kw)
         self.__draw_header()
         self.add_form(MasterForm, ofsy=20)
-        
+
     def __draw_header(self):
-        from data_header import HeaderData
+        from data.header import HeaderData
         self.draw_template(HeaderData)
-        
+
 
 def main():
     """This is the main stub, used for testing"""
-    from data_master import testData, XYPositions
+    from data.master import testData, XYPositions
     from pickle import dumps, loads
 
     data = dumps(XYPositions)
