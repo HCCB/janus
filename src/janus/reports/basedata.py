@@ -148,7 +148,8 @@ testData = {
 
 def main():
     """Test stub for this file"""
-    print black
+    from pickle import dumps
+    print dumps(FP_MASTER_INFO)
     return 0
 
 if __name__ == "__main__":

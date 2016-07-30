@@ -38,29 +38,34 @@ class BaseForm(object):
         self.log("pagesize = %s" % str(pagesize))
         self.canvas.setPageSize(pagesize)
 
-    def draw_template(self, template_data):
+    def draw_template(self, template_data, **kw):
         func_mapping = {
             'Images': self.__draw_images,
             'Labels': self.__draw_text_labels,
             'Lines': self.__draw_lines,
             }
 
+        ofsx = kw.get("ofsx", 0)
+        ofsy = kw.get("ofsy", 0)
+
         for k, data in template_data.items():
-            func_mapping[k](data)
+            func_mapping[k](data, ofsx, ofsy)
 
         # self.__draw_images(template_data['Images'])
         # self.__draw_text_labels(template_data.Labels)
         # self.__draw_lines(tempalte_data.Lines)
 
-    def __draw_images(self, data):
+    def __draw_images(self, data, ofsx, ofsy):
         for img, x, y, h, mask, aspect in data:
+            x += ofsx
+            y += ofsy
             img_path = os.path.join(basedir, img)
             self.log("opening image - %s" % img_path)
             self.canvas.drawImage(img_path, x, self.height - h - y,
                                   height=h,
                                   mask=mask, preserveAspectRatio=aspect)
 
-    def __draw_text_labels(self, data):
+    def __draw_text_labels(self, data, ofsx, ofsy):
         c = self.canvas
         for (font, size), label in data.items():
             for x, y, align, color, text in label:
@@ -74,13 +79,15 @@ class BaseForm(object):
                     x = x - (w / 2)
                 elif align == 'RIGHT':
                     x = x - w
+                x += ofsx
+                y += ofsy
                 t = c.beginText(x, self.height - y)
                 t.setFont(font, size)
                 t.setFillColor(color)
                 t.textOut(text)
                 c.drawText(t)
 
-    def __draw_lines(self, data):
+    def __draw_lines(self, data, ofsx, ofsy):
         c = self.canvas
         for width, lines in data.items():
             for x1, y1, x2, y2, color in lines:
@@ -94,6 +101,11 @@ class BaseForm(object):
                     y1 = abs(y1)
                 else:
                     y1 = self.height - y1
+
+                x1 += ofsx
+                x2 += ofsx
+                y1 -= ofsy
+                y2 -= ofsy
                 c.setStrokeColor(color)
                 c.setLineWidth(width)
                 c.line(x1, y1, x2, y2)
@@ -106,15 +118,18 @@ class BaseForm(object):
         if self.verbose:
             print msg
 
-    def populate(self, dict, positions):
+    def populate(self, dict, positions, **kw):
         c = self.canvas
+        ofsx = kw.get("ofsx", 0)
+        ofsy = kw.get("ofsy", 0)
         for k, v in dict.items():
             if k not in positions:
                 if self.verbose:
                     print "populate() item not found - %s" % k
                 continue
             (x, y), (fontface, fontsize, color)  = positions[k]
-            y = self.height - y
+            y = (self.height - y) - ofsy
+            x = x + ofsx
             t = c.beginText(x, y)
             t.setFont(fontface, fontsize)
             t.setFillColor(color)
@@ -126,7 +141,7 @@ class FormElectrolytes(BaseForm):
     def __init__(self, **kw):
         from basedata import TemplateData
         super(FormElectrolytes, self).__init__(**kw)
-        self.draw_template(TemplateData)
+        self.draw_template(TemplateData, ofsy=20)
 
 
 def main():
@@ -144,7 +159,7 @@ def main():
     with open("test.pdf", "w+b") as f:
         # form = BaseForm(verbose=1, templatedata=TemplateData)
         form = FormElectrolytes(verbose=1)
-        form.populate(testData, FP_MASTER_INFO)
+        form.populate(testData, FP_MASTER_INFO, ofsy=20)
         form.save(f)
 
 
