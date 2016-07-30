@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+
 from reportlab.lib.colors import black
-from data_common import *
+from data_common import cm, Helvetica, Courier
 
 ly1 = (3.5 + 0.1) * cm
 ly2 = (4 + 0.1) * cm
@@ -45,13 +47,13 @@ text_normal = [
 Labels = {
     (Helvetica, 10): text_normal,
     }
-    
+
 MasterData = {
     'Images': [],
     'Lines': Lines,
     'Labels': Labels
     }
-    
+
 
 FPOX = 0.05       # x offset for field positions
 MASTER_FONT = Courier
@@ -98,3 +100,11 @@ testData = {
     'sex': 'XXXXXX',
     'room_number': 'XXXXXX',
 }
+
+
+def main():
+    return 0
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())
