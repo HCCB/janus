@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 from reportlab.lib.colors import black, red
 
-inch = INCH = 72
-cm = CM = inch / 2.54
-Courier = 'Courier'
-Helvetica = 'Helvetica'
-Helvetica_Bold = 'Helvetica-Bold'
-Helvetica_Oblique = 'Helvetica-Bold-Oblique'
-OldEnglish = "OldEngMT"
+from data_common import *
 
 FPOX = 0.05       # x offset for field positions
 HX = 4.5 * inch   # x for centered text for letterhead
@@ -29,29 +23,8 @@ line_thick = [
     (0.5 * cm, 3.05 * cm, -0.5 * cm, 3.05 * cm, red),
 ]
 
-ly1 = (3.5 + 0.1) * cm
-ly2 = (4 + 0.1) * cm
-line_thin = [
-    (0.8 * cm, 4.25 * cm, -0.8 * cm, 4.25 * cm, black),
-    # Line for Name
-    (2 * cm, ly1, 11 * cm, ly1, black),
-    # Line for Date
-    (12 * cm, ly1, 15.5 * cm, ly1, black),
-    # Line for Case Number
-    (17 * cm, ly1, 20 * cm, ly1, black),
-    # line for Requesting Physician
-    (4.45 * cm, ly2, 11 * cm, ly2, black),
-    # line for Age
-    (12 * cm, ly2, 13 * cm, ly2, black),
-    # line for Sex
-    (14 * cm, ly2, 15.5 * cm, ly2, black),
-    # line for Room Number
-    (17 * cm, ly2, 20 * cm, ly2, black),
-]
-
 Lines = {
     0.95: line_thick,
-    0.25: line_thin,
 }
 
 # Text
@@ -73,22 +46,6 @@ helvetica_9_text = [
      "Telefox No.: +63 (95) 342-3975/225-6872"),
     (HX, 2.75 * cm, 'CENTER', black,
      "email: hccb.hospital@gmail.com"),
-
-    # master info labels
-    (2 * cm, 3.5 * cm, 'RIGHT', black,
-     'Name:'),
-    (12 * cm, 3.5 * cm, 'RIGHT', black,
-     'Date:'),
-    (17 * cm, 3.5 * cm, 'RIGHT', black,
-     'Case #:'),
-    (4.45 * cm, 4 * cm, 'RIGHT', black,
-     'Requesting Physician:'),
-    (12 * cm, 4 * cm, 'RIGHT', black,
-     'Age:'),
-    (14 * cm, 4 * cm, 'RIGHT', black,
-     'Sex:'),
-    (17 * cm, 4 * cm, 'RIGHT', black,
-     'Room#:'),
 ]
 
 Labels = {
@@ -97,7 +54,7 @@ Labels = {
     (Helvetica, 10): helvetica_9_text,
 }
 
-TemplateData = {
+HeaderData = {
     'Images': Images,
     'Lines': Lines,
     'Labels': Labels,

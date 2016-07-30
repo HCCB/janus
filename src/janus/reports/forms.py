@@ -7,12 +7,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.colors import black
 
-Courier = 'Courier'
-Helvetica = 'Helvetica'
-Helvetica_Bold = 'Helvetica-Bold'
-Helvetica_Oblique = 'Helvetica-Bold-Oblique'
-
-OldEnglish = "OldEngMT"
+from data_common import *
 
 # load fonts
 import os.path
@@ -24,6 +19,8 @@ pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
 class BaseForm(object):
     def __init__(self, **kw):
         super(BaseForm, self).__init__()
+        
+        self.positions = {}
 
         self.buff = BytesIO()
         self.verbose = kw.get('verbose', 0)
@@ -117,11 +114,17 @@ class BaseForm(object):
     def log(self, msg):
         if self.verbose:
             print msg
-
-    def populate(self, dict, positions, **kw):
+            
+    def add_form(self, formdata, **kw):
+        template, xypositions = formdata
+        self.positions.update(xypositions)
+        self.draw_template(template, **kw)
+            
+    def populate(self, dict, **kw):
         c = self.canvas
         ofsx = kw.get("ofsx", 0)
         ofsy = kw.get("ofsy", 0)
+        positions = self.positions
         for k, v in dict.items():
             if k not in positions:
                 if self.verbose:
@@ -139,18 +142,22 @@ class BaseForm(object):
 
 class FormElectrolytes(BaseForm):
     def __init__(self, **kw):
-        from basedata import TemplateData
+        from data_master import MasterForm
         super(FormElectrolytes, self).__init__(**kw)
-        self.draw_template(TemplateData, ofsy=20)
-
+        self.__draw_header()
+        self.add_form(MasterForm, ofsy=20)
+        
+    def __draw_header(self):
+        from data_header import HeaderData
+        self.draw_template(HeaderData)
+        
 
 def main():
     """This is the main stub, used for testing"""
-    from basedata import TemplateData
-    from basedata import FP_MASTER_INFO, testData
+    from data_master import testData, XYPositions
     from pickle import dumps, loads
 
-    data = dumps(TemplateData)
+    data = dumps(XYPositions)
     obj = loads(data)
 
     print data
@@ -159,7 +166,7 @@ def main():
     with open("test.pdf", "w+b") as f:
         # form = BaseForm(verbose=1, templatedata=TemplateData)
         form = FormElectrolytes(verbose=1)
-        form.populate(testData, FP_MASTER_INFO, ofsy=20)
+        form.populate(testData, ofsy=20, ofsx=3)
         form.save(f)
 
 
