@@ -48,7 +48,7 @@ Labels = {
     (Helvetica, 10): text_normal,
     }
 
-MasterData = {
+DrawData = {
     'Images': [],
     'Lines': Lines,
     'Labels': Labels
@@ -89,7 +89,7 @@ XYPositions = {
     ),
 }
 
-MasterForm = (MasterData, XYPositions)
+MasterForm = (DrawData, XYPositions)
 
 testData = {
     'fullname': 'XXXXXXXXXX, XXXXXXXXXXXXXXXXX g.',
