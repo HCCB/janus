@@ -16,6 +16,12 @@ Helvetica_Oblique = 'Helvetica-Bold-Oblique'
 
 OldEnglish = "OldEngMT"
 
+# load fonts
+import os.path
+basedir = os.path.dirname(os.path.realpath(__file__))
+ttfFile = os.path.join(basedir, 'fonts/oldeng.ttf')
+pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
+
 Images = [
     (
         './static/HCCB-Hospital-Logo.png',
@@ -29,7 +35,11 @@ Images = [
 
 HX = 5 * inch
 
-oldeng_16_text = [
+line_normal = [
+    (0.5 * cm, 3.05 * cm, -0.5 * cm, 3.05 * cm, red),
+]
+
+oldeng_18_text = [
     (HX, 1.00 * cm, 'CENTER', red,
      "Holy Child Colleges of Butuan - Hospital"),
 ]
@@ -48,15 +58,14 @@ helvetica_9_text = [
      "email: hccb.hospital@gmail.com"),
 ]
 Labels = {
-    (OldEnglish, 16): oldeng_16_text,
+    (OldEnglish, 18): oldeng_18_text,
     (Helvetica_Bold, 9): helvetica_bold_9_text,
     (Helvetica, 9): helvetica_9_text,
 }
 
-
-# load fonts
-ttfFile = './fonts/oldeng.ttf'
-pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
+Lines = {
+    0.5: line_normal,
+}
 
 
 class BaseForm(object):
@@ -76,13 +85,14 @@ class BaseForm(object):
         self.canvas.setPageSize(pagesize)
 
         self.__draw_images()
-
         self.__draw_text_labels()
+        self.__draw_lines()
 
     def __draw_images(self):
         for img, x, y, h, mask, aspect in Images:
-            self.log("opening image - %s" % img)
-            self.canvas.drawImage(img, x, self.height - h - y,
+            img_path = os.path.join(basedir, img)
+            self.log("opening image - %s" % img_path)
+            self.canvas.drawImage(img_path, x, self.height - h - y,
                                   height=h,
                                   mask=mask, preserveAspectRatio=aspect)
 
@@ -91,13 +101,11 @@ class BaseForm(object):
         for (font, size), label in Labels.items():
             for x, y, align, color, text in label:
                 w = c.stringWidth(text, fontName=font, fontSize=size)
-                self.log("w = %f" % w)
                 if x == -1:
                     x = self.width / 2
                 if y == -1:
                     y = self.height / 2
 
-                self.log("x = %f" % x)
                 if align == 'CENTER':
                     x = x - (w / 2)
                 t = c.beginText(x, self.height - y)
@@ -105,6 +113,23 @@ class BaseForm(object):
                 t.setFillColor(color)
                 t.textOut(text)
                 c.drawText(t)
+
+    def __draw_lines(self):
+        c = self.canvas
+        for width, lines in Lines.items():
+            for x1, y1, x2, y2, color in lines:
+                if x2 < 0:
+                    x2 = self.width + x2
+                if y2 < 0:
+                    y2 = abs(y2)
+                else:
+                    y2 = self.height - y2
+                if y1 < 0:
+                    y1 = abs(y1)
+                else:
+                    y1 = self.height - y1
+                c.setStrokeColor(color)
+                c.line(x1, y1, x2, y2)
 
     def save(self, output):
         self.canvas.save()
