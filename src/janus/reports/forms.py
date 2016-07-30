@@ -115,8 +115,19 @@ class BaseForm(object):
             print msg
 
     def add_form(self, formdata, **kw):
+        from copy import deepcopy
         template, xypositions = formdata
-        self.positions.update(xypositions)
+        ofsx = kw.get('ofsx', 0)
+        ofsy = kw.get('ofsy', 0)
+        positions = deepcopy(xypositions)
+        if ofsx or ofsy:
+            # we will update the xy positions adding the corresponding offset
+            for k, v in positions.items():
+                coord, other = v
+                x, y = coord
+                positions[k] = ((x+ofsx, y+ofsy), other)
+
+        self.positions.update(positions)
         self.draw_template(template, **kw)
 
     def populate(self, dict, **kw):
@@ -144,7 +155,7 @@ class FormElectrolytes(BaseForm):
         from data.master import MasterForm
         super(FormElectrolytes, self).__init__(**kw)
         self.__draw_header()
-        self.add_form(MasterForm, ofsy=20)
+        self.add_form(MasterForm, ofsy=20, ofsx=5)
 
     def __draw_header(self):
         from data.header import HeaderData
@@ -165,7 +176,7 @@ def main():
     with open("test.pdf", "w+b") as f:
         # form = BaseForm(verbose=1, templatedata=TemplateData)
         form = FormElectrolytes(verbose=1)
-        form.populate(testData, ofsy=20, ofsx=3)
+        form.populate(testData)
         form.save(f)
 
 

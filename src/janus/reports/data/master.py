@@ -55,7 +55,7 @@ MasterData = {
     }
 
 
-FPOX = 0.05       # x offset for field positions
+FPOX = 0.15       # x offset for field positions
 MASTER_FONT = Courier
 MASTER_SIZE = 11
 XYPositions = {
