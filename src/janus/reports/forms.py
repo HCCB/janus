@@ -5,10 +5,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.pagesizes import A5, landscape
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.colors import black, red
 
-inch = INCH = 72
-cm = CM = inch / 2.54
 Courier = 'Courier'
 Helvetica = 'Helvetica'
 Helvetica_Bold = 'Helvetica-Bold'
@@ -22,59 +19,21 @@ basedir = os.path.dirname(os.path.realpath(__file__))
 ttfFile = os.path.join(basedir, 'fonts/oldeng.ttf')
 pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
 
-Images = [
-    (
-        './static/HCCB-Hospital-Logo.png',
-        0.2 * cm,   # left
-        0.2 * cm,   # top
-        2.85 * cm,  # height
-        'auto',     # mask
-        True,       # preserveAspectRatio
-    )
-]
-
-HX = 5 * inch
-
-line_normal = [
-    (0.5 * cm, 3.05 * cm, -0.5 * cm, 3.05 * cm, red),
-]
-
-oldeng_18_text = [
-    (HX, 1.00 * cm, 'CENTER', red,
-     "Holy Child Colleges of Butuan - Hospital"),
-]
-helvetica_bold_9_text = [
-    (HX, 1.35 * cm, 'CENTER', black,
-     "(JP Esteves Clinical Laboratory)"),
-]
-helvetica_9_text = [
-    (HX, 1.70 * cm, 'CENTER', black,
-     "2nd Str., Guingona Subd., Butuan City, Philippines"),
-    (HX, 2.05 * cm, 'CENTER', black,
-     "Tel. No.: +63 (85) 342-5186"),
-    (HX, 2.40 * cm, 'CENTER', black,
-     "Telefox No.: +63 (95) 342-3975/225-6872"),
-    (HX, 2.75 * cm, 'CENTER', black,
-     "email: hccb.hospital@gmail.com"),
-]
-Labels = {
-    (OldEnglish, 18): oldeng_18_text,
-    (Helvetica_Bold, 9): helvetica_bold_9_text,
-    (Helvetica, 9): helvetica_9_text,
-}
-
-Lines = {
-    0.5: line_normal,
-}
-
 
 class BaseForm(object):
     def __init__(self, **kw):
         super(BaseForm, self).__init__()
 
+        func_mapping = {
+            'Images': self.__draw_images,
+            'Labels': self.__draw_text_labels,
+            'Lines': self.__draw_lines,
+            }
+
         self.buff = BytesIO()
         self.verbose = kw.get('verbose', 0)
         self.text_font = kw.get('fontface', Courier)
+        template_data = kw.get('templatedata', {})
 
         self.log("creating canvas")
         self.canvas = Canvas(self.buff)
@@ -84,21 +43,24 @@ class BaseForm(object):
         self.log("pagesize = %s" % str(pagesize))
         self.canvas.setPageSize(pagesize)
 
-        self.__draw_images()
-        self.__draw_text_labels()
-        self.__draw_lines()
+        for k, data in template_data.items():
+            func_mapping[k](data)
 
-    def __draw_images(self):
-        for img, x, y, h, mask, aspect in Images:
+        # self.__draw_images(template_data['Images'])
+        # self.__draw_text_labels(template_data.Labels)
+        # self.__draw_lines(tempalte_data.Lines)
+
+    def __draw_images(self, data):
+        for img, x, y, h, mask, aspect in data:
             img_path = os.path.join(basedir, img)
             self.log("opening image - %s" % img_path)
             self.canvas.drawImage(img_path, x, self.height - h - y,
                                   height=h,
                                   mask=mask, preserveAspectRatio=aspect)
 
-    def __draw_text_labels(self):
+    def __draw_text_labels(self, data):
         c = self.canvas
-        for (font, size), label in Labels.items():
+        for (font, size), label in data.items():
             for x, y, align, color, text in label:
                 w = c.stringWidth(text, fontName=font, fontSize=size)
                 if x == -1:
@@ -114,9 +76,9 @@ class BaseForm(object):
                 t.textOut(text)
                 c.drawText(t)
 
-    def __draw_lines(self):
+    def __draw_lines(self, data):
         c = self.canvas
-        for width, lines in Lines.items():
+        for width, lines in data.items():
             for x1, y1, x2, y2, color in lines:
                 if x2 < 0:
                     x2 = self.width + x2
@@ -129,6 +91,7 @@ class BaseForm(object):
                 else:
                     y1 = self.height - y1
                 c.setStrokeColor(color)
+                c.setLineWidth(width)
                 c.line(x1, y1, x2, y2)
 
     def save(self, output):
@@ -142,9 +105,10 @@ class BaseForm(object):
 
 def main():
     """This is the main stub, used for testing"""
+    from basedata import TemplateData
 
     with open("test.pdf", "w+b") as f:
-        form = BaseForm(verbose=1)
+        form = BaseForm(verbose=1, templatedata=TemplateData)
         form.save(f)
 
 
