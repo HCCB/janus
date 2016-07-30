@@ -15,7 +15,7 @@ line_normal = [
     # line for Age
     (12 * cm, ly2, 13 * cm, ly2, black),
     # line for Sex
-    (14 * cm, ly2, 15.5 * cm, ly2, black),
+    (13.8 * cm, ly2, 15.5 * cm, ly2, black),
     # line for Room Number
     (17 * cm, ly2, 20 * cm, ly2, black),
     # bottom line
@@ -37,7 +37,7 @@ text_normal = [
      'Requesting Physician:'),
     (12 * cm, 4 * cm, 'RIGHT', black,
      'Age:'),
-    (14 * cm, 4 * cm, 'RIGHT', black,
+    (13.8 * cm, 4 * cm, 'RIGHT', black,
      'Sex:'),
     (17 * cm, 4 * cm, 'RIGHT', black,
      'Room#:'),
@@ -78,7 +78,7 @@ XYPositions = {
         (MASTER_FONT, MASTER_SIZE, black),
     ),
     'sex': (
-        ((14 + FPOX) * cm, 4 * cm),
+        ((13.8 + FPOX) * cm, 4 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
     ),
     'room_number': (
