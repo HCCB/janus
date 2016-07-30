@@ -5,6 +5,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.pagesizes import A5, landscape
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.colors import black
 
 Courier = 'Courier'
 Helvetica = 'Helvetica'
@@ -24,16 +25,10 @@ class BaseForm(object):
     def __init__(self, **kw):
         super(BaseForm, self).__init__()
 
-        func_mapping = {
-            'Images': self.__draw_images,
-            'Labels': self.__draw_text_labels,
-            'Lines': self.__draw_lines,
-            }
-
         self.buff = BytesIO()
         self.verbose = kw.get('verbose', 0)
-        self.text_font = kw.get('fontface', Courier)
-        template_data = kw.get('templatedata', {})
+        self.fontface = kw.get('fontface', Courier)
+        self.fontsize = kw.get('fontsize', 10)
 
         self.log("creating canvas")
         self.canvas = Canvas(self.buff)
@@ -42,6 +37,13 @@ class BaseForm(object):
 
         self.log("pagesize = %s" % str(pagesize))
         self.canvas.setPageSize(pagesize)
+
+    def draw_template(self, template_data):
+        func_mapping = {
+            'Images': self.__draw_images,
+            'Labels': self.__draw_text_labels,
+            'Lines': self.__draw_lines,
+            }
 
         for k, data in template_data.items():
             func_mapping[k](data)
@@ -70,6 +72,8 @@ class BaseForm(object):
 
                 if align == 'CENTER':
                     x = x - (w / 2)
+                elif align == 'RIGHT':
+                    x = x - w
                 t = c.beginText(x, self.height - y)
                 t.setFont(font, size)
                 t.setFillColor(color)
@@ -102,13 +106,45 @@ class BaseForm(object):
         if self.verbose:
             print msg
 
+    def populate(self, dict, positions):
+        c = self.canvas
+        for k, v in dict.items():
+            if k not in positions:
+                if self.verbose:
+                    print "populate() item not found - %s" % k
+                continue
+            (x, y), (fontface, fontsize, color)  = positions[k]
+            y = self.height - y
+            t = c.beginText(x, y)
+            t.setFont(fontface, fontsize)
+            t.setFillColor(color)
+            t.textOut(v)
+            c.drawText(t)
+
+
+class FormElectrolytes(BaseForm):
+    def __init__(self, **kw):
+        from basedata import TemplateData
+        super(FormElectrolytes, self).__init__(**kw)
+        self.draw_template(TemplateData)
+
 
 def main():
     """This is the main stub, used for testing"""
     from basedata import TemplateData
+    from basedata import FP_MASTER_INFO, testData
+    from pickle import dumps, loads
+
+    data = dumps(TemplateData)
+    obj = loads(data)
+
+    print data
+    print obj
 
     with open("test.pdf", "w+b") as f:
-        form = BaseForm(verbose=1, templatedata=TemplateData)
+        # form = BaseForm(verbose=1, templatedata=TemplateData)
+        form = FormElectrolytes(verbose=1)
+        form.populate(testData, FP_MASTER_INFO)
         form.save(f)
 
 
