@@ -5,7 +5,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.pagesizes import A5, landscape
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-
+from reportlab .lib.enums import TA_CENTER, TA_RIGHT
 from data.common import Courier
 
 # load fonts
@@ -139,6 +139,11 @@ class BaseForm(object):
             (x, y), (fontface, fontsize, color), align = positions[k]
             y = (self.height - y) - ofsy
             x = x + ofsx
+            w = c.stringWidth(v, fontName=fontface, fontSize=fontsize)
+            if align == TA_CENTER:
+                x = x - (w / 2)
+            elif align == TA_RIGHT:
+                x = x - w
             t = c.beginText(x, y)
             t.setFont(fontface, fontsize)
             t.setFillColor(color)
@@ -162,6 +167,7 @@ def main():
     """This is the main stub, used for testing"""
     from data.master import testData, XYPositions
     from data.signatory import SignatureForm1, sigformtest1
+    from data.signatory import SignatureForm2, sigformtest2
     from pickle import dumps, loads
 
     data = dumps(XYPositions)
@@ -173,9 +179,11 @@ def main():
     with open("test.pdf", "w+b") as f:
         # form = BaseForm(verbose=1, templatedata=TemplateData)
         form = FormElectrolytes(verbose=1)
-        form.add_form(SignatureForm1, ofsy=254)
-        form.populate(testData)
+        form.add_form(SignatureForm1, ofsy=254, ofsx=20)
+        form.add_form(SignatureForm2, ofsy=254, ofsx=400)
         form.populate(sigformtest1)
+        form.populate(sigformtest2)
+        form.populate(testData)
         form.save(f)
 
 
