@@ -119,9 +119,9 @@ class BaseForm(object):
         if ofsx or ofsy:
             # we will update the xy positions adding the corresponding offset
             for k, v in positions.items():
-                coord, other = v
+                coord, other, align = v
                 x, y = coord
-                positions[k] = ((x+ofsx, y+ofsy), other)
+                positions[k] = ((x+ofsx, y+ofsy), other, align)
 
         self.positions.update(positions)
         self.draw_template(template, **kw)
@@ -161,6 +161,7 @@ class FormElectrolytes(BaseForm):
 def main():
     """This is the main stub, used for testing"""
     from data.master import testData, XYPositions
+    from data.signatory import SignatureForm1, sigformtest1
     from pickle import dumps, loads
 
     data = dumps(XYPositions)
@@ -172,7 +173,9 @@ def main():
     with open("test.pdf", "w+b") as f:
         # form = BaseForm(verbose=1, templatedata=TemplateData)
         form = FormElectrolytes(verbose=1)
+        form.add_form(SignatureForm1, ofsy=254)
         form.populate(testData)
+        form.populate(sigformtest1)
         form.save(f)
 
 
