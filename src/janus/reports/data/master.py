@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from reportlab.lib.colors import black
-from data_common import cm, Helvetica, Courier
+from common import cm, Helvetica, Courier
 
 ly1 = (3.5 + 0.1) * cm
 ly2 = (4 + 0.1) * cm
