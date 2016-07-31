@@ -47,10 +47,6 @@ class BaseForm(object):
         for k, data in template_data.items():
             func_mapping[k](data, ofsx, ofsy)
 
-        # self.__draw_images(template_data['Images'])
-        # self.__draw_text_labels(template_data.Labels)
-        # self.__draw_lines(tempalte_data.Lines)
-
     def __draw_images(self, data, ofsx, ofsy):
         for img, x, y, h, mask, aspect in data:
             x += ofsx
@@ -155,7 +151,7 @@ class FormElectrolytes(BaseForm):
         from data.master import MasterForm
         super(FormElectrolytes, self).__init__(**kw)
         self.__draw_header()
-        self.add_form(MasterForm, ofsy=20, ofsx=5)
+        self.add_form(MasterForm)
 
     def __draw_header(self):
         from data.header import HeaderData
