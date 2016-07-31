@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from reportlab.lib.colors import black
-from common import cm, Helvetica, Courier
+from reportlab.lib.enums import TA_LEFT
+from common import cm, Helvetica, Courier, Thin_Line
 
 ly1 = (3.5 + 0.1) * cm
 ly2 = (4 + 0.1) * cm
@@ -24,7 +25,7 @@ line_normal = [
     (0.8 * cm, 4.25 * cm, -0.8 * cm, 4.25 * cm, black),
     ]
 Lines = {
-    0.25: line_normal,
+    Thin_Line: line_normal,
     }
 
 text_normal = [
@@ -62,30 +63,37 @@ XYPositions = {
     'fullname': (
         ((2 + FPOX) * cm, 3.5 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
+	TA_LEFT,
     ),
     'date': (
         ((12 + FPOX) * cm, 3.5 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
+	TA_LEFT,
     ),
     'case_number': (
         ((17 + FPOX) * cm, 3.5 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
+	TA_LEFT,
     ),
     'physician': (
         ((4.45 + FPOX) * cm, 4 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
+	TA_LEFT,
     ),
     'age': (
         ((12 + FPOX) * cm, 4 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
+	TA_LEFT,
     ),
     'sex': (
         ((13.8 + FPOX) * cm, 4 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
+	TA_LEFT,
     ),
     'room_number': (
         ((17 + FPOX) * cm, 4 * cm),
         (MASTER_FONT, MASTER_SIZE, black),
+	TA_LEFT,
     ),
 }
 

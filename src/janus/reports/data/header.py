@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from reportlab.lib.colors import black, red
 
-from common import cm, inch, OldEnglish, Helvetica, Helvetica_Bold
+from common import cm, inch, OldEnglish, Helvetica, Helvetica_Bold, Thick_Line
 
 HX = 4.5 * inch   # x for centered text for letterhead
 
@@ -23,7 +23,7 @@ line_thick = [
 ]
 
 Lines = {
-    0.95: line_thick,
+    Thick_Line: line_thick,
 }
 
 # Text

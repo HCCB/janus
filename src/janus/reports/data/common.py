@@ -13,3 +13,6 @@ Helvetica = 'Helvetica'
 Helvetica_Bold = 'Helvetica-Bold'
 Helvetica_Oblique = 'Helvetica-Bold-Oblique'
 OldEnglish = "OldEngMT"
+
+Thin_Line = 0.25 
+Thick_Line = 0.95

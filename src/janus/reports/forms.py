@@ -136,7 +136,7 @@ class BaseForm(object):
                 if self.verbose:
                     print "populate() item not found - %s" % k
                 continue
-            (x, y), (fontface, fontsize, color) = positions[k]
+            (x, y), (fontface, fontsize, color), align = positions[k]
             y = (self.height - y) - ofsy
             x = x + ofsx
             t = c.beginText(x, y)
