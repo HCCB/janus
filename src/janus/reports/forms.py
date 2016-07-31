@@ -6,6 +6,8 @@ from reportlab.lib.pagesizes import A5, landscape
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab .lib.enums import TA_CENTER, TA_RIGHT
+from reportlab.lib.units import cm
+
 from data.common import Courier
 
 # load fonts
@@ -179,8 +181,8 @@ def main():
     with open("test.pdf", "w+b") as f:
         # form = BaseForm(verbose=1, templatedata=TemplateData)
         form = FormElectrolytes(verbose=1)
-        form.add_form(SignatureForm1, ofsy=254, ofsx=20)
-        form.add_form(SignatureForm2, ofsy=254, ofsx=400)
+        form.add_form(SignatureForm1, ofsy=13*cm, ofsx=20)
+        form.add_form(SignatureForm2, ofsy=13*cm, ofsx=400)
         form.populate(sigformtest1)
         form.populate(sigformtest2)
         form.populate(testData)
