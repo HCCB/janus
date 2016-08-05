@@ -1,12 +1,13 @@
 #!/usr/bin/env python
+# coding=utf-8
 from io import BytesIO
 
-from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT
 from reportlab.lib.pagesizes import A5, landscape
+from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab .lib.enums import TA_CENTER, TA_RIGHT
-from reportlab.lib.units import cm
+from reportlab.pdfgen.canvas import Canvas
 
 from data.common import Courier
 
@@ -117,12 +118,15 @@ class BaseForm(object):
         template, xypositions = formdata
         ofsx = kw.get('ofsx', 0)
         ofsy = kw.get('ofsy', 0)
+        ns = kw.get('fldSuffix', "")
         positions = deepcopy(xypositions)
         if ofsx or ofsy:
             # we will update the xy positions adding the corresponding offset
             for k, v in positions.items():
                 coord, other, align = v
                 x, y = coord
+                if ns:
+                    k = k + ns
                 positions[k] = ((x+ofsx, y+ofsy), other, align)
 
         self.positions.update(positions)
@@ -156,9 +160,14 @@ class BaseForm(object):
 class FormElectrolytes(BaseForm):
     def __init__(self, **kw):
         from data.master import MasterForm
+        from data.signatory import SignatureForm
+
         super(FormElectrolytes, self).__init__(**kw)
         self.__draw_header()
         self.add_form(MasterForm)
+
+        self.add_form(SignatureForm, ofsy=13 * cm, ofsx=40, fldSuffix="_1")
+        self.add_form(SignatureForm, ofsy=13 * cm, ofsx=380, fldSuffix="_2")
 
     def __draw_header(self):
         from data.header import HeaderData
@@ -168,8 +177,8 @@ class FormElectrolytes(BaseForm):
 def main():
     """This is the main stub, used for testing"""
     from data.master import testData, XYPositions
-    from data.signatory import SignatureForm1, sigformtest1
-    from data.signatory import SignatureForm2, sigformtest2
+    from data.signatory import sigformtest1
+    from data.signatory import sigformtest2
     from pickle import dumps, loads
 
     data = dumps(XYPositions)
@@ -181,8 +190,6 @@ def main():
     with open("test.pdf", "w+b") as f:
         # form = BaseForm(verbose=1, templatedata=TemplateData)
         form = FormElectrolytes(verbose=1)
-        form.add_form(SignatureForm1, ofsy=13*cm, ofsx=20)
-        form.add_form(SignatureForm2, ofsy=13*cm, ofsx=400)
         form.populate(sigformtest1)
         form.populate(sigformtest2)
         form.populate(testData)

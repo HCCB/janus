@@ -1,5 +1,7 @@
+# coding=utf-8
 from reportlab.lib.colors import black
 from reportlab.lib.enums import TA_CENTER
+
 from common import cm, Helvetica, Thin_Line
 
 FONTFACE = Helvetica
@@ -27,53 +29,34 @@ DrawData = {
     'Labels': {},
 }
 
-XYPositions_1 = {
-    'sig_name_1': (
+XYPositions = {
+    'sig_name': (
         (MID, (HEIGHT - (INTERVAL * 3) - 0.1) * cm),
         (FONTFACE, FONTSIZE, black),
         TA_CENTER,
         ),
-    'sig_position_1': (
+    'sig_position': (
         (MID, (HEIGHT - (INTERVAL * 2)) * cm),
         (FONTFACE, FONTSIZE, black),
         TA_CENTER,
         ),
-    'sig_license_1': (
+    'sig_license': (
         (MID,  (HEIGHT - (INTERVAL * 1)) * cm),
         (FONTFACE, FONTSIZE, black),
         TA_CENTER,
         ),
     }
-
-SignatureForm1 = (DrawData, XYPositions_1)
 
 sigformtest1 = {
     'sig_name_1': 'XXXXXXXXX X. XXXXXXXXX, XXX',
     'sig_position_1': 'XXXXXXXXXXXXXXX',
     'sig_license_1': 'LIC NO. XXXXXXXXXX',
 }
-XYPositions_2 = {
-    'sig_name_2': (
-        (MID, (HEIGHT - (INTERVAL * 3) - 0.1) * cm),
-        (FONTFACE, FONTSIZE, black),
-        TA_CENTER,
-        ),
-    'sig_position_2': (
-        (MID, (HEIGHT - (INTERVAL * 2)) * cm),
-        (FONTFACE, FONTSIZE, black),
-        TA_CENTER,
-        ),
-    'sig_license_2': (
-        (MID,  (HEIGHT - (INTERVAL * 1)) * cm),
-        (FONTFACE, FONTSIZE, black),
-        TA_CENTER,
-        ),
-    }
-
-SignatureForm2 = (DrawData, XYPositions_2)
 
 sigformtest2 = {
     'sig_name_2': '22XXXXXXXXX X. XXXXXXXXX, XXX',
     'sig_position_2': '22XXXXXXXXXXXXXXX',
     'sig_license_2': 'LIC NO. 2222222222',
 }
+
+SignatureForm = (DrawData, XYPositions)
