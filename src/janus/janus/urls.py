@@ -22,15 +22,12 @@ from django.conf.urls.static import static
 
 from django.views.generic.base import RedirectView
 
-import tinymce.urls
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
     url(r'^dt/', include('drugtest.urls', namespace='drugtest')),
     url(r'^$', TemplateView.as_view(template_name='index.html')),
-    url(r'^tinymce/', include(tinymce.urls)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
