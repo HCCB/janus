@@ -8,6 +8,7 @@
       "short_name": "U/A",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          1,
          2,
@@ -24,6 +25,7 @@
       "short_name": "HBsAg",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          1
       ]
@@ -38,6 +40,7 @@
       "short_name": "CBC",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          1,
          2,
@@ -54,6 +57,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -66,6 +70,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -78,6 +83,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -90,6 +96,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -102,6 +109,7 @@
       "short_name": "S/E",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          2,
          3
@@ -117,6 +125,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -129,6 +138,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -141,6 +151,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -153,6 +164,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -165,6 +177,7 @@
       "short_name": "ABO/RH Typing",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          1
       ]
@@ -179,6 +192,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -191,6 +205,7 @@
       "short_name": "ESR",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -203,6 +218,7 @@
       "short_name": "BSMP",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -215,6 +231,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -227,6 +244,7 @@
       "short_name": "CTBT",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -239,6 +257,7 @@
       "short_name": "FBS",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          2,
          3
@@ -254,6 +273,7 @@
       "short_name": "RBS",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -266,6 +286,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -278,6 +299,7 @@
       "short_name": "2hrs. PPBS",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -290,6 +312,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -302,6 +325,7 @@
       "short_name": "BUA",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          2,
          3
@@ -317,6 +341,7 @@
       "short_name": "BUN",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          3
       ]
@@ -331,6 +356,7 @@
       "short_name": "CREA",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          2,
          3
@@ -346,6 +372,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -358,6 +385,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -370,6 +398,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -381,7 +410,8 @@
       "name": "Electrolytes",
       "short_name": "",
       "result_type": 2,
-      "reference_text": "",
+      "reference_text": "135.0 - 145.0 mmol/L, 3.5 - 5.1 mmol/L, 95.0 - 115.0 mmol/L, 1.1 -1.35 mmol/L",
+      "components": "SODIUM, POTASSIUM, CHLORIDE, IONIZED CALCIUM",
       "profiles": []
    }
 },
@@ -394,6 +424,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          2,
          3
@@ -409,6 +440,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": [
          3
       ]
@@ -423,6 +455,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -435,6 +468,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -447,6 +481,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -459,6 +494,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -471,6 +507,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -483,6 +520,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -495,6 +533,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -507,6 +546,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -519,6 +559,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -531,6 +572,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -543,6 +585,7 @@
       "short_name": "DT",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -555,6 +598,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -567,6 +611,7 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
    }
 },
@@ -579,7 +624,29 @@
       "short_name": "",
       "result_type": 2,
       "reference_text": "",
+      "components": "RESULT",
       "profiles": []
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 1,
+   "fields": {
+      "name": "OB Panel"
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 2,
+   "fields": {
+      "name": "Executive Panel 1"
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 3,
+   "fields": {
+      "name": "Executive Panel 2"
    }
 },
 {
@@ -620,27 +687,6 @@
    "fields": {
       "name": "Miscellaneous",
       "alternate_name": ""
-   }
-},
-{
-   "model": "drugtest.testprofile",
-   "pk": 1,
-   "fields": {
-      "name": "OB Panel"
-   }
-},
-{
-   "model": "drugtest.testprofile",
-   "pk": 2,
-   "fields": {
-      "name": "Executive Panel 1"
-   }
-},
-{
-   "model": "drugtest.testprofile",
-   "pk": 3,
-   "fields": {
-      "name": "Executive Panel 2"
    }
 }
 ]
