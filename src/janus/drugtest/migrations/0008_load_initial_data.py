@@ -8,7 +8,8 @@ from django.core.management import call_command
 fixture = 'initial_data'
 
 def load_initial(apps, schema_editor):
-    call_command('loaddata', fixture, app_label='drugtest')
+    # call_command('loaddata', fixture, app_label='drugtest')
+    pass
 
 class Migration(migrations.Migration):
 
