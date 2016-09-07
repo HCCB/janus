@@ -1,5 +1,66 @@
 [
 {
+   "model": "drugtest.testprofile",
+   "pk": 1,
+   "fields": {
+      "name": "OB Panel"
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 2,
+   "fields": {
+      "name": "Executive Panel 1"
+   }
+},
+{
+   "model": "drugtest.testprofile",
+   "pk": 3,
+   "fields": {
+      "name": "Executive Panel 2"
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 1,
+   "fields": {
+      "name": "Clinical Microscopy",
+      "alternate_name": ""
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 2,
+   "fields": {
+      "name": "Hematology",
+      "alternate_name": "Blood Test"
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 3,
+   "fields": {
+      "name": "Clinical Chemistry",
+      "alternate_name": ""
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 4,
+   "fields": {
+      "name": "Immuno-Serology",
+      "alternate_name": ""
+   }
+},
+{
+   "model": "drugtest.testcategory",
+   "pk": 5,
+   "fields": {
+      "name": "Miscellaneous",
+      "alternate_name": ""
+   }
+},
+{
    "model": "drugtest.analysis",
    "pk": 1,
    "fields": {
@@ -626,67 +687,6 @@
       "reference_text": "",
       "components": "RESULT",
       "profiles": []
-   }
-},
-{
-   "model": "drugtest.testprofile",
-   "pk": 1,
-   "fields": {
-      "name": "OB Panel"
-   }
-},
-{
-   "model": "drugtest.testprofile",
-   "pk": 2,
-   "fields": {
-      "name": "Executive Panel 1"
-   }
-},
-{
-   "model": "drugtest.testprofile",
-   "pk": 3,
-   "fields": {
-      "name": "Executive Panel 2"
-   }
-},
-{
-   "model": "drugtest.testcategory",
-   "pk": 1,
-   "fields": {
-      "name": "Clinical Microscopy",
-      "alternate_name": ""
-   }
-},
-{
-   "model": "drugtest.testcategory",
-   "pk": 2,
-   "fields": {
-      "name": "Hematology",
-      "alternate_name": "Blood Test"
-   }
-},
-{
-   "model": "drugtest.testcategory",
-   "pk": 3,
-   "fields": {
-      "name": "Clinical Chemistry",
-      "alternate_name": ""
-   }
-},
-{
-   "model": "drugtest.testcategory",
-   "pk": 4,
-   "fields": {
-      "name": "Immuno-Serology",
-      "alternate_name": ""
-   }
-},
-{
-   "model": "drugtest.testcategory",
-   "pk": 5,
-   "fields": {
-      "name": "Miscellaneous",
-      "alternate_name": ""
    }
 }
 ]
