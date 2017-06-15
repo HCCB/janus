@@ -325,6 +325,7 @@ class Detail(Flowable):
                  components,
                  references,
                  title=""):
+        Flowable.__init__(self)
         self.styles = getSampleStyleSheet()
         self.has_references = bool(references)
         self.title = title
