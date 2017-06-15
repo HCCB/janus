@@ -85,3 +85,6 @@ webpack-stats*.json
 
 # pdf
 *.pdf
+
+# .ropeproject
+.ropeproject
