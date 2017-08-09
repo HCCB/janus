@@ -27,12 +27,39 @@ from reportlab.platypus.flowables import Flowable
 
 from reportlab.lib.styles import getSampleStyleSheet
 
+# for NumberedCanvas
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import mm
+
+
+class NumberedCanvas(canvas.Canvas):
+    def __init__(self, *args, **kwargs):
+        canvas.Canvas.__init__(self, *args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        """add page info to each page (page x of y)"""
+        num_pages = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self.draw_page_number(num_pages)
+            canvas.Canvas.showPage(self)
+        canvas.Canvas.save(self)
+
+    def draw_page_number(self, page_count):
+        self.setFont("Helvetica", 7)
+        self.drawRightString(200*mm, 7*mm,
+            "Page %d of %d" % (self._pageNumber, page_count))
+
 
 class ReportTemplate(BaseDocTemplate):
 
     def __init__(self, filename, **kw):
         self.allowSplitting = 0
-
         self.pagesize = kw.get('pagesize', landscape(A5))
         kw['pagesize'] = self.pagesize
 
@@ -55,18 +82,19 @@ class ReportTemplate(BaseDocTemplate):
 
         template = PageTemplate('normal', frames=[frame, ],
                                 pagesize=self.pagesize)
-        self.loadFonts()
+        self._loadFonts()
         self.addPageTemplates(template)
+        # self._setMetadata()
 
     def beforePage(self):
         self.canv.saveState()
 
-        self.drawHeader()
+        self._drawHeader()
 
         self.canv.restoreState()
 
-    def drawLogo(self):
-        logo_fname = self.normpath('static/HCCB-Hospital-Logo.png')
+    def _drawLogo(self):
+        logo_fname = self._normpath('static/HCCB-Hospital-Logo.png')
         logo = ImageReader(logo_fname)
         w, h = self.pagesize
         self.canv.drawImage(logo, 0.2*cm, h-self.topMargin,
@@ -75,8 +103,11 @@ class ReportTemplate(BaseDocTemplate):
                             preserveAspectRatio=True
                             )
 
-    def drawHeader(self):
-        self.drawLogo()
+    def _setMetadata(self):
+        self.canv.setTitle(self.title)
+
+    def _drawHeader(self):
+        self._drawLogo()
         styles = getSampleStyleSheet()
         sN = styles['Normal']
         sH = styles['Heading1']
@@ -113,12 +144,12 @@ class ReportTemplate(BaseDocTemplate):
                        w-0.15*cm, h-self.topMargin,
                        )
 
-    def normpath(self, filespec):
+    def _normpath(self, filespec):
         path = os.path.dirname(os.path.relpath(__file__))
         return os.path.join(path, filespec)
 
-    def loadFonts(self):
-        ttfFile = self.normpath('fonts/oldeng.ttf')
+    def _loadFonts(self):
+        ttfFile = self._normpath('fonts/oldeng.ttf')
         pdfmetrics.registerFont(TTFont("OldEngMT", ttfFile))
 
 
@@ -407,6 +438,7 @@ class Report(object):
         buff = BytesIO()
         try:
             doc = ReportTemplate(buff)
+            doc.setTitle("test PDF")
             styles = self.styles
             story = []
 
@@ -465,7 +497,7 @@ def test():
     story.append(Paragraph('Last heading', h1))
     # story.append(header)
 
-    doc.multiBuild(story)
+    doc.multiBuild(story, canvasmaker=NumberedCanvas)
 
 
 if __name__ == "__main__":
